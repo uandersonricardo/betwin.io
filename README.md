@@ -3,5 +3,9 @@ Repositório para a centralização das entregas da disciplina de [Análise e Pr
 
 O betwin.io é uma plataforma de apostas online que oferece a melhor experiência e os melhores serviços de apostas com as melhores odds do mercado. O usuário pode fazer apostas simples, combinadas, acompanhar as estatísticas das partidas, encerrar as apostas antecipadamente e até favoritar as partidas que mais lhe interessam. Além disso, o betwin.io possui a feature exclusiva de limite de perda diário, dando mais segurança ao apostador — evitando que aja de forma imprudente com seu dinheiro.
 
+## Equipe
+- Danilo Vaz Marcolino Alves (dvma)
+- Uanderson Ricardo Ferreira da Silva (urfs)
+
 ## Entregas
 - [Descrição da equipe, escopo do projeto e casos de usos a serem trabalhados](https://docs.google.com/document/d/1qjtF7gKPQcllIiyvflN_EY4MvY2E6e5c7SLSbbHjHKs/edit?usp=sharing)
