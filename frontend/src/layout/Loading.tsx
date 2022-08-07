@@ -1,5 +1,11 @@
 import React from "react";
 
-const Loading: React.FC = () => <h1>Loading</h1>;
+import { Flex, Spinner } from "@chakra-ui/react";
+
+const Loading: React.FC = () => (
+  <Flex w="full" h="full" align="center" justify="center">
+    <Spinner color="pink.400" size="lg" />
+  </Flex>
+);
 
 export default Loading;

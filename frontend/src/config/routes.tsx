@@ -1,6 +1,7 @@
 import React, { lazy } from "react";
 
 const Login = lazy(() => import("../screens/Login"));
+const Register = lazy(() => import("../screens/Register"));
 const Dashboard = lazy(() => import("../screens/Dashboard"));
 
 type Route = {
@@ -12,15 +13,21 @@ type Route = {
 
 const routes: Route[] = [
   {
-    path: "/dashboard",
+    path: "/",
     name: "Dashboard",
     component: Dashboard,
     isProtected: true
   },
   {
-    path: "/",
+    path: "login",
     name: "Login",
     component: Login,
+    isProtected: false
+  },
+  {
+    path: "register",
+    name: "Cadastrar",
+    component: Register,
     isProtected: false
   }
 ];

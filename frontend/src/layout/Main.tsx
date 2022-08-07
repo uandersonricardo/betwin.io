@@ -22,7 +22,7 @@ const Main: React.FC = () => (
           }
         />
       ))}
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   </Flex>
 );
