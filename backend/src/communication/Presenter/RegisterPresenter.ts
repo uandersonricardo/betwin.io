@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
-import Facade from "../../business/controls/Facade";
 import UserFields from "../../business/entities/UserFields";
+import Facade from "../../business/facade/Facade";
 
 class RegisterPresenter {
   private facade;

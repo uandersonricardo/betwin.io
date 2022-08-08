@@ -1,4 +1,4 @@
-import IUserRepository from "../../data/IRepository/IUserRepository";
+import IUserRepository from "../../data/iRepository/IUserRepository";
 import UserFields from "../entities/UserFields";
 
 class UserRegister {

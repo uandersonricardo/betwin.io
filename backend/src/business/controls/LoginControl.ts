@@ -1,4 +1,4 @@
-import UserRegister from "./UserRegister";
+import UserRegister from "../entityCollection/UserRegister";
 
 class LoginControl {
   private userRegister;

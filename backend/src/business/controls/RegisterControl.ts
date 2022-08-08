@@ -1,6 +1,6 @@
 import UserFields from "../entities/UserFields";
-import AccountRegister from "./AccountRegister";
-import UserRegister from "./UserRegister";
+import AccountRegister from "../entityCollection/AccountRegister";
+import UserRegister from "../entityCollection/UserRegister";
 
 class RegisterControl {
   private userRegister;

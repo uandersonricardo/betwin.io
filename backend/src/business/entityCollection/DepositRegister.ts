@@ -1,4 +1,4 @@
-import IDepositRepository from "../../data/IRepository/IDepositRepository";
+import IDepositRepository from "../../data/iRepository/IDepositRepository";
 import User from "../entities/User";
 
 class DepositRegister {
