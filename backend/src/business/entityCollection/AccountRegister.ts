@@ -1,4 +1,4 @@
-import IAccountRepository from "../../data/IRepository/IAccountRepository";
+import IAccountRepository from "../../data/iRepository/IAccountRepository";
 import User from "../entities/User";
 import UserFields from "../entities/UserFields";
 

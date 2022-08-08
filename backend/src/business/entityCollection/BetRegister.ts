@@ -1,4 +1,4 @@
-import IBetRepository from "../../data/IRepository/IBetRepository";
+import IBetRepository from "../../data/iRepository/IBetRepository";
 import BetOdd from "../entities/BetOdd";
 import Match from "../entities/Match";
 import User from "../entities/User";

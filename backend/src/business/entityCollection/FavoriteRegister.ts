@@ -1,4 +1,4 @@
-import IFavoriteRepository from "../../data/IRepository/IFavoriteRepository";
+import IFavoriteRepository from "../../data/iRepository/IFavoriteRepository";
 import Match from "../entities/Match";
 import User from "../entities/User";
 

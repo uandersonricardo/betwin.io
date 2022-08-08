@@ -1,11 +1,11 @@
+import DepositControl from "../controls/DepositControl";
+import LoginControl from "../controls/LoginControl";
+import MatchControl from "../controls/MatchControl";
+import RegisterControl from "../controls/RegisterControl";
 import BetOdd from "../entities/BetOdd";
 import Match from "../entities/Match";
 import User from "../entities/User";
 import UserFields from "../entities/UserFields";
-import DepositControl from "./DepositControl";
-import LoginControl from "./LoginControl";
-import MatchControl from "./MatchControl";
-import RegisterControl from "./RegisterControl";
 
 class Facade {
   private registerControl;

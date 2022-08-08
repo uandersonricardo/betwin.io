@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 
-import Facade from "../../business/controls/Facade";
+import Facade from "../../business/facade/Facade";
 
 class MatchPresenter {
   private facade;
