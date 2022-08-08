@@ -1,11 +1,16 @@
-import IAccountRepository from "../../data/iRepository/IAccountRepository";
+import { inject, injectable } from "tsyringe";
+
+import IAccountRepository from "../../data/repositoryInterfaces/IAccountRepository";
 import User from "../entities/User";
 import UserFields from "../entities/UserFields";
 
-class AccountRegister {
+@injectable()
+class AccountCollection {
   private accountRepository;
 
-  constructor(accountRepository: IAccountRepository) {
+  constructor(
+    @inject("AccountRepository") accountRepository: IAccountRepository
+  ) {
     this.accountRepository = accountRepository;
   }
 
@@ -18,4 +23,4 @@ class AccountRegister {
   }
 }
 
-export default AccountRegister;
+export default AccountCollection;

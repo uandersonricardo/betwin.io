@@ -1,17 +1,19 @@
-import UserRegister from "../entityCollection/UserRegister";
+import { injectable } from "tsyringe";
 
+import UserCollection from "../entityCollections/UserCollection";
+
+@injectable()
 class LoginControl {
-  private userRegister;
+  private userCollection;
 
-  constructor(userRegister: UserRegister) {
-    this.userRegister = userRegister;
+  constructor(userCollection: UserCollection) {
+    this.userCollection = userCollection;
   }
 
   public login(username: string, password: string) {
-    this.userRegister.exist(username, password);
+    this.userCollection.exist(username, password);
   }
 
-  // Lack the user parameter
   public registerSession() {
     return null;
   }

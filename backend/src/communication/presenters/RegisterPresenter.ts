@@ -1,8 +1,10 @@
 import { Request, Response } from "express";
+import { injectable } from "tsyringe";
 
 import UserFields from "../../business/entities/UserFields";
-import Facade from "../../business/facade/Facade";
+import Facade from "../../business/facades/Facade";
 
+@injectable()
 class RegisterPresenter {
   private facade;
 
@@ -17,8 +19,11 @@ class RegisterPresenter {
       req.body.email,
       req.body.cpf
     );
+
     this.facade.register(userFields);
-    res.status(203);
+
+    res.status(203).send();
   }
 }
-export default new RegisterPresenter();
+
+export default RegisterPresenter;

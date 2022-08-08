@@ -1,7 +1,7 @@
 import Match from "./Match";
 import User from "./User";
 
-class Favorites {
+class Favorite {
   private match;
   private user;
 
@@ -27,4 +27,4 @@ class Favorites {
   }
 }
 
-export default Favorites;
+export default Favorite;

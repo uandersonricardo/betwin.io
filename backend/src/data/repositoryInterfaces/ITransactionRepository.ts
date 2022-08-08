@@ -1,7 +1,7 @@
 import User from "../../business/entities/User";
 
-interface IDepositRepository {
+interface ITransactionRepository {
   insert(method: string, value: number, user: User): void;
 }
 
-export default IDepositRepository;
+export default ITransactionRepository;

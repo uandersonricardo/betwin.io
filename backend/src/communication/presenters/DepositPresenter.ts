@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
+import { injectable } from "tsyringe";
 
-import Facade from "../../business/facade/Facade";
+import Facade from "../../business/facades/Facade";
 
+@injectable()
 class DepositPresenter {
   private facade;
 
@@ -18,4 +20,5 @@ class DepositPresenter {
     res.status(203);
   }
 }
-export default new DepositPresenter();
+
+export default DepositPresenter;

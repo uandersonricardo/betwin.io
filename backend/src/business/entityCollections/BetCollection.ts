@@ -1,12 +1,15 @@
-import IBetRepository from "../../data/iRepository/IBetRepository";
+import { inject, injectable } from "tsyringe";
+
+import IBetRepository from "../../data/repositoryInterfaces/IBetRepository";
 import BetOdd from "../entities/BetOdd";
 import Match from "../entities/Match";
 import User from "../entities/User";
 
-class BetRegister {
+@injectable()
+class BetCollection {
   private betRepository;
 
-  constructor(betRepository: IBetRepository) {
+  constructor(@inject("BetRepository") betRepository: IBetRepository) {
     this.betRepository = betRepository;
   }
 
@@ -14,4 +17,4 @@ class BetRegister {
     this.betRepository.insert(user, match, odd, value);
   }
 }
-export default BetRegister;
+export default BetCollection;
