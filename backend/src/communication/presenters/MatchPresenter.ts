@@ -1,7 +1,9 @@
 import { Request, Response } from "express";
+import { injectable } from "tsyringe";
 
-import Facade from "../../business/facade/Facade";
+import Facade from "../../business/facades/Facade";
 
+@injectable()
 class MatchPresenter {
   private facade;
 
@@ -24,4 +26,5 @@ class MatchPresenter {
     res.status(203);
   }
 }
-export default new MatchPresenter();
+
+export default MatchPresenter;

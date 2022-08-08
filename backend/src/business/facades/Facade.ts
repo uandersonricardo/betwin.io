@@ -1,3 +1,5 @@
+import { injectable } from "tsyringe";
+
 import DepositControl from "../controls/DepositControl";
 import LoginControl from "../controls/LoginControl";
 import MatchControl from "../controls/MatchControl";
@@ -7,6 +9,7 @@ import Match from "../entities/Match";
 import User from "../entities/User";
 import UserFields from "../entities/UserFields";
 
+@injectable()
 class Facade {
   private registerControl;
   private loginControl;

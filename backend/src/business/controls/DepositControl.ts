@@ -1,15 +1,18 @@
+import { injectable } from "tsyringe";
+
 import User from "../entities/User";
-import DepositRegister from "./DepositRegister";
+import TransactionCollection from "../entityCollections/TransactionCollection";
 
+@injectable()
 class DepositControl {
-  private depositRegister: DepositRegister;
+  private transactionCollection: TransactionCollection;
 
-  constructor(depositRegister: DepositRegister) {
-    this.depositRegister = depositRegister;
+  constructor(transactionCollection: TransactionCollection) {
+    this.transactionCollection = transactionCollection;
   }
 
   public createTransactionDeposit(method: string, value: number, user: User) {
-    this.depositRegister.insert(method, value, user);
+    this.transactionCollection.insert(method, value, user);
   }
 }
 

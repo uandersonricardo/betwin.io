@@ -1,19 +1,25 @@
+import { injectable } from "tsyringe";
+
 import UserFields from "../entities/UserFields";
-import AccountRegister from "../entityCollection/AccountRegister";
-import UserRegister from "../entityCollection/UserRegister";
+import AccountCollection from "../entityCollections/AccountCollection";
+import UserCollection from "../entityCollections/UserCollection";
 
+@injectable()
 class RegisterControl {
-  private userRegister;
-  private accountRegister;
+  private userCollection;
+  private accountCollection;
 
-  constructor(userRegister: UserRegister, accountRegister: AccountRegister) {
-    this.userRegister = userRegister;
-    this.accountRegister = accountRegister;
+  constructor(
+    userCollection: UserCollection,
+    accountCollection: AccountCollection
+  ) {
+    this.userCollection = userCollection;
+    this.accountCollection = accountCollection;
   }
 
   public register(user: UserFields) {
-    this.userRegister.insert(user);
-    this.accountRegister.insert(user);
+    this.userCollection.insert(user);
+    this.accountCollection.insert(user);
   }
 }
 

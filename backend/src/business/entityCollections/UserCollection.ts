@@ -1,10 +1,13 @@
-import IUserRepository from "../../data/iRepository/IUserRepository";
+import { inject, injectable } from "tsyringe";
+
+import IUserRepository from "../../data/repositoryInterfaces/IUserRepository";
 import UserFields from "../entities/UserFields";
 
-class UserRegister {
+@injectable()
+class UserCollection {
   private userRepository;
 
-  constructor(userRepository: IUserRepository) {
+  constructor(@inject("UserRepository") userRepository: IUserRepository) {
     this.userRepository = userRepository;
   }
 
@@ -17,4 +20,4 @@ class UserRegister {
   }
 }
 
-export default UserRegister;
+export default UserCollection;
