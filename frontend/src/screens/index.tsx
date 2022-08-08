@@ -9,7 +9,7 @@ import Loading from "../layout/Loading";
 const unprotectedRoutes = routes.filter(route => !route.isProtected);
 
 const Root = () => {
-  const logged = false;
+  const logged = true;
 
   return (
     <BrowserRouter>
