@@ -1,10 +1,17 @@
-class LoginControl {
-  private userRegister: UserRegister;
+import UserRegister from "./UserRegister";
 
-  public login(username: string, password: string) {
-    this.userRegister.login(username, password);
+class LoginControl {
+  private userRegister;
+
+  constructor(userRegister: UserRegister) {
+    this.userRegister = userRegister;
   }
 
+  public login(username: string, password: string) {
+    this.userRegister.exist(username, password);
+  }
+
+  // Lack the user parameter
   public registerSession() {
     return null;
   }

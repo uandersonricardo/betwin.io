@@ -1,14 +1,18 @@
 import UserFields from "../entities/UserFields";
+import AccountRegister from "./AccountRegister";
+import UserRegister from "./UserRegister";
 
 class RegisterControl {
-  private userRegister: UserRegister;
-  private accountRegister: AccountRegister;
+  private userRegister;
+  private accountRegister;
 
-  public insertUser(user: UserFields) {
-    this.userRegister.insert(user);
+  constructor(userRegister: UserRegister, accountRegister: AccountRegister) {
+    this.userRegister = userRegister;
+    this.accountRegister = accountRegister;
   }
 
-  public insertAccount(user: UserFields) {
+  public register(user: UserFields) {
+    this.userRegister.insert(user);
     this.accountRegister.insert(user);
   }
 }
