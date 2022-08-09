@@ -12,10 +12,15 @@ class LoginPresenter {
   }
 
   public login(req: Request, res: Response) {
-    this.facade.login(req.body.username, req.body.password);
-    // Lack the user parameter
-    this.facade.registersession();
-    res.status(203);
+    const user = this.facade.login(req.body.username, req.body.password);
+
+    if (!user) {
+      throw new Error("Invalid credentials");
+    }
+
+    this.facade.registerSession(user);
+
+    res.status(200).json(user);
   }
 }
 

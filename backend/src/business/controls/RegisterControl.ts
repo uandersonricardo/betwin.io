@@ -17,9 +17,11 @@ class RegisterControl {
     this.accountCollection = accountCollection;
   }
 
-  public register(user: UserFields) {
-    this.userCollection.insert(user);
+  public register(userFields: UserFields) {
+    const user = this.userCollection.insert(userFields);
     this.accountCollection.insert(user);
+
+    return user;
   }
 }
 
