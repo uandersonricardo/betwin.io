@@ -2,7 +2,6 @@ import { singleton } from "tsyringe";
 
 import Account from "../../../business/entities/Account";
 import User from "../../../business/entities/User";
-import UserFields from "../../../business/entities/UserFields";
 import IAccountRepository from "../../repositoryInterfaces/IAccountRepository";
 
 @singleton()
@@ -13,8 +12,12 @@ class AccountRepositoryInMemory implements IAccountRepository {
     this.accounts = [];
   }
 
-  insert(user: UserFields) {
-    throw new Error("Method not implemented.");
+  insert(user: User) {
+    const newAccount = new Account(user, 0);
+
+    this.accounts.push(newAccount);
+
+    return newAccount;
   }
 
   changeCash(user: User, value: number) {

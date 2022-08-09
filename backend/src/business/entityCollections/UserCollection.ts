@@ -12,11 +12,11 @@ class UserCollection {
   }
 
   public insert(user: UserFields) {
-    this.userRepository.insert(user);
+    return this.userRepository.insert(user);
   }
 
-  public exist(username: string, password: string) {
-    this.userRepository.exist(username, password);
+  public validateCredentials(username: string, password: string) {
+    return this.userRepository.validateCredentials(username, password);
   }
 }
 

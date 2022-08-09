@@ -1,5 +1,10 @@
-import { injectable } from "tsyringe";
+import { container, inject, injectable, singleton } from "tsyringe";
 
+import IAccountRepository from "../../data/repositoryInterfaces/IAccountRepository";
+import IBetRepository from "../../data/repositoryInterfaces/IBetRepository";
+import IFavoriteRepository from "../../data/repositoryInterfaces/IFavoriteRepository";
+import ITransactionRepository from "../../data/repositoryInterfaces/ITransactionRepository";
+import IUserRepository from "../../data/repositoryInterfaces/IUserRepository";
 import DepositControl from "../controls/DepositControl";
 import LoginControl from "../controls/LoginControl";
 import MatchControl from "../controls/MatchControl";
@@ -8,37 +13,54 @@ import BetOdd from "../entities/BetOdd";
 import Match from "../entities/Match";
 import User from "../entities/User";
 import UserFields from "../entities/UserFields";
+import IRepositoryFactory from "../factories/IRepositoryFactory";
 
 @injectable()
+@singleton()
 class Facade {
+  private repositoryFactory;
   private registerControl;
   private loginControl;
   private matchControl;
   private depositControl;
 
   constructor(
-    registerControl: RegisterControl,
-    loginControl: LoginControl,
-    matchControl: MatchControl,
-    depositControl: DepositControl
+    @inject("RepositoryFactory") repositoryFactory: IRepositoryFactory
   ) {
-    this.registerControl = registerControl;
-    this.loginControl = loginControl;
-    this.matchControl = matchControl;
-    this.depositControl = depositControl;
+    this.repositoryFactory = repositoryFactory;
+
+    container.register<IAccountRepository>("AccountRepository", {
+      useValue: this.repositoryFactory.createAccountRepository()
+    });
+    container.register<IBetRepository>("BetRepository", {
+      useValue: this.repositoryFactory.createBetRepository()
+    });
+    container.register<IFavoriteRepository>("FavoriteRepository", {
+      useValue: this.repositoryFactory.createFavoriteRepository()
+    });
+    container.register<ITransactionRepository>("TransactionRepository", {
+      useValue: this.repositoryFactory.createTransactionRepository()
+    });
+    container.register<IUserRepository>("UserRepository", {
+      useValue: this.repositoryFactory.createUserRepository()
+    });
+
+    this.registerControl = container.resolve(RegisterControl);
+    this.loginControl = container.resolve(LoginControl);
+    this.matchControl = container.resolve(MatchControl);
+    this.depositControl = container.resolve(DepositControl);
   }
 
   public register(user: UserFields) {
-    this.registerControl.register(user);
+    return this.registerControl.register(user);
   }
 
   public login(username: string, password: string) {
-    this.loginControl.login(username, password);
+    return this.loginControl.login(username, password);
   }
 
-  // Lack the user parameter
-  public registersession() {
-    this.loginControl.registerSession();
+  public registerSession(user: User) {
+    return this.loginControl.registerSession(user);
   }
 
   public bet(user: User, match: Match, odd: BetOdd, value: number) {

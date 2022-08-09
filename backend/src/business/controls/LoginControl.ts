@@ -1,5 +1,6 @@
 import { injectable } from "tsyringe";
 
+import User from "../entities/User";
 import UserCollection from "../entityCollections/UserCollection";
 
 @injectable()
@@ -11,11 +12,11 @@ class LoginControl {
   }
 
   public login(username: string, password: string) {
-    this.userCollection.exist(username, password);
+    return this.userCollection.validateCredentials(username, password);
   }
 
-  public registerSession() {
-    return null;
+  public registerSession(user: User) {
+    return true;
   }
 }
 

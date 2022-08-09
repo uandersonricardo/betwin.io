@@ -22,7 +22,7 @@ class RegisterPresenter {
 
     this.facade.register(userFields);
 
-    res.status(203).send();
+    res.status(201).json();
   }
 }
 
