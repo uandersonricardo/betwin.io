@@ -1,4 +1,5 @@
 import { singleton } from "tsyringe";
+import { v4 as uuidv4 } from "uuid";
 
 import Transaction from "../../../business/entities/Transaction";
 import User from "../../../business/entities/User";
@@ -12,8 +13,19 @@ class TransactionRepositoryInMemory implements ITransactionRepository {
     this.transactions = [];
   }
 
-  insert(method: string, value: number, user: User) {
-    throw new Error("Method not implemented.");
+  async insert(method: string, value: number, user: User) {
+    const id = uuidv4();
+    const date = new Date();
+
+    const newTransaction = new Transaction(
+      id,
+      "deposit",
+      method,
+      value,
+      user,
+      date
+    );
+    this.transactions.push(newTransaction);
   }
 }
 

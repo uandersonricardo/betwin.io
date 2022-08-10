@@ -13,7 +13,7 @@ class UserRepositoryInMemory implements IUserRepository {
     this.users = [];
   }
 
-  insert(user: UserFields) {
+  async insert(user: UserFields) {
     if (
       this.users.find(
         currentUser => currentUser.getUsername() === user.getUsername()
@@ -49,7 +49,7 @@ class UserRepositoryInMemory implements IUserRepository {
     return newUser;
   }
 
-  validateCredentials(username: string, password: string) {
+  async validateCredentials(username: string, password: string) {
     return (
       this.users.find(
         user =>

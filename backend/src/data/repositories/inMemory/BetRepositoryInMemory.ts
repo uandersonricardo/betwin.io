@@ -1,4 +1,5 @@
 import { singleton } from "tsyringe";
+import { v4 as uuidv4 } from "uuid";
 
 import Bet from "../../../business/entities/Bet";
 import BetOdd from "../../../business/entities/BetOdd";
@@ -14,8 +15,12 @@ class BetRepositoryInMemory implements IBetRepository {
     this.bets = [];
   }
 
-  insert(user: User, match: Match, odd: BetOdd, value: number) {
-    throw new Error("Method not implemented.");
+  async insert(user: User, match: Match, odd: BetOdd, value: number) {
+    const id = uuidv4();
+    const date = new Date();
+
+    const newBet = new Bet(id, value, odd, user, match);
+    this.bets.push(newBet);
   }
 }
 

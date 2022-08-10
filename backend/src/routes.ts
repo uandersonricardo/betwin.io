@@ -72,8 +72,81 @@ routes.post(
     loginPresenter.login(req, res);
   }
 );
-routes.post("/deposit", (req, res) => depositPresenter.deposit(req, res));
-routes.post("/bet", (req, res) => matchPresenter.bet(req, res));
-routes.post("/favorite", (req, res) => matchPresenter.favorite(req, res));
+routes.post(
+  "/deposit",
+  [
+    body("method").notEmpty().withMessage("Escolher o método é obrigatório"),
+    body("value")
+      .notEmpty()
+      .withMessage("Definir o valor é obrigatório")
+      .isNumeric()
+      .withMessage("O campo deve ser preenchido com números apenas")
+      .custom(value => {
+        return value >= 5.0;
+      })
+      .withMessage("O valor mínimo de depósito é de 5.00"),
+    body("user")
+      .notEmpty()
+      .withMessage("É necessario estar logado para fazer um depósito")
+  ],
+  (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    depositPresenter.deposit(req, res);
+  }
+);
+routes.post(
+  "/bet",
+  [
+    body("user")
+      .notEmpty()
+      .withMessage("É necessario estar logado para fazer uma aposta"),
+    body("match")
+      .notEmpty()
+      .withMessage("É necessário escolher um jogo para apostar"),
+    body("odd")
+      .notEmpty()
+      .withMessage("É necessario escolher a opção de aposta"),
+    body("value")
+      .notEmpty()
+      .withMessage("Definir o valor é obrigatório")
+      .isNumeric()
+      .withMessage("O campo deve ser preenchido com números apenas")
+      .custom(value => {
+        return value >= 1.0;
+      })
+      .withMessage("O valor mínimo de depósito é de 1.00")
+  ],
+  (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    matchPresenter.bet(req, res);
+  }
+);
+routes.post(
+  "/favorite",
+  [
+    body("user")
+      .notEmpty()
+      .withMessage("É necessario estar logado para favoritar uma partida"),
+    body("match")
+      .notEmpty()
+      .withMessage("É necessário escolher um jogo para favoritar")
+  ],
+  (req: Request, res: Response) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    matchPresenter.favorite(req, res);
+  }
+);
 
 export default routes;

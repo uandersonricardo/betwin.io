@@ -13,8 +13,9 @@ class FavoriteRepositoryInMemory implements IFavoriteRepository {
     this.favorites = [];
   }
 
-  insert(user: User, match: Match) {
-    throw new Error("Method not implemented.");
+  async insert(user: User, match: Match) {
+    const newFavorite = new Favorite(user, match);
+    this.favorites.push(newFavorite);
   }
 }
 
