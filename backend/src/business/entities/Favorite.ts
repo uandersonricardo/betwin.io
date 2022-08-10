@@ -2,10 +2,10 @@ import Match from "./Match";
 import User from "./User";
 
 class Favorite {
-  private match;
   private user;
+  private match;
 
-  constructor(match: Match, user: User) {
+  constructor(user: User, match: Match) {
     this.match = match;
     this.user = user;
   }

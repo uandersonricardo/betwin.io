@@ -12,7 +12,13 @@ class AccountRepositoryInMemory implements IAccountRepository {
     this.accounts = [];
   }
 
-  insert(user: User) {
+  async insert(user: User) {
+    // Talvez desnecessário
+    if (
+      this.accounts.find(currentAccount => currentAccount.getUser() === user)
+    ) {
+      throw new Error("User already exists");
+    }
     const newAccount = new Account(user, 0);
 
     this.accounts.push(newAccount);
@@ -20,8 +26,16 @@ class AccountRepositoryInMemory implements IAccountRepository {
     return newAccount;
   }
 
-  changeCash(user: User, value: number) {
-    throw new Error("Method not implemented.");
+  async changeCash(user: User, value: number) {
+    const index = this.accounts.findIndex(
+      currentAccount => currentAccount.getUser() === user
+    );
+
+    if (index && this.accounts[index].getCash() - value < 0.0) {
+      throw new Error("Not enough cash");
+    }
+
+    this.accounts[index].setCash(this.accounts[index].getCash() - value);
   }
 }
 
