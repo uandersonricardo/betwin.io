@@ -11,14 +11,14 @@ class LoginPresenter {
     this.facade = facade;
   }
 
-  public login(req: Request, res: Response) {
-    const user = this.facade.login(req.body.username, req.body.password);
+  public async login(req: Request, res: Response) {
+    const user = await this.facade.login(req.body.username, req.body.password);
 
     if (!user) {
       throw new Error("Invalid credentials");
     }
 
-    this.facade.registerSession(user);
+    await this.facade.registerSession(user);
 
     res.status(200).json(user);
   }

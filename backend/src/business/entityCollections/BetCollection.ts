@@ -13,8 +13,8 @@ class BetCollection {
     this.betRepository = betRepository;
   }
 
-  public insert(user: User, match: Match, odd: BetOdd, value: number) {
-    this.betRepository.insert(user, match, odd, value);
+  public async insert(user: User, match: Match, odd: BetOdd, value: number) {
+    await this.betRepository.insert(user, match, odd, value);
   }
 }
 export default BetCollection;

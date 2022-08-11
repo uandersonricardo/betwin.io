@@ -13,12 +13,12 @@ class AccountCollection {
     this.accountRepository = accountRepository;
   }
 
-  public insert(user: User) {
-    return this.accountRepository.insert(user);
+  public async insert(user: User) {
+    return await this.accountRepository.insert(user);
   }
 
-  public changeCash(user: User, value: number) {
-    this.accountRepository.changeCash(user, value);
+  public async changeCash(user: User, value: number) {
+    await this.accountRepository.changeCash(user, value);
   }
 }
 

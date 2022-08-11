@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 
-mongoose.connect(process.env.MONGO_URL || "");
+import environment from "../config/environment";
+
+mongoose.connect(environment.mongoUrl || "");
 
 export default mongoose;

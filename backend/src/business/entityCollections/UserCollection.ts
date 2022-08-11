@@ -11,12 +11,12 @@ class UserCollection {
     this.userRepository = userRepository;
   }
 
-  public insert(user: UserFields) {
-    return this.userRepository.insert(user);
+  public async insert(user: UserFields) {
+    return await this.userRepository.insert(user);
   }
 
-  public validateCredentials(username: string, password: string) {
-    return this.userRepository.validateCredentials(username, password);
+  public async validateCredentials(username: string, password: string) {
+    return await this.userRepository.validateCredentials(username, password);
   }
 }
 

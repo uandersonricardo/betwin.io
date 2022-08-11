@@ -11,19 +11,26 @@ class MatchPresenter {
     this.facade = facade;
   }
 
-  public bet(req: Request, res: Response) {
-    this.facade.bet(
+  public async matches(req: Request, res: Response) {
+    const matches = await this.facade.matches(
+      req.query.filter?.toString() || ""
+    );
+    res.status(200).json(matches);
+  }
+
+  public async bet(req: Request, res: Response) {
+    await this.facade.bet(
       req.body.user,
       req.body.match,
       req.body.odd,
       req.body.value
     );
-    res.status(203);
+    res.status(201);
   }
 
-  public favorite(req: Request, res: Response) {
-    this.facade.favorite(req.body.user, req.body.match);
-    res.status(203);
+  public async favorite(req: Request, res: Response) {
+    await this.facade.favorite(req.body.user, req.body.match);
+    res.status(201);
   }
 }
 

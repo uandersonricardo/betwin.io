@@ -48,13 +48,13 @@ routes.post(
       })
       .withMessage("O campo CPF deve conter apenas números")
   ],
-  (req: Request, res: Response) => {
+  async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    registerPresenter.register(req, res);
+    await registerPresenter.register(req, res);
   }
 );
 routes.post(
@@ -63,13 +63,13 @@ routes.post(
     body("username").notEmpty().withMessage("O campo nome é obrigatório"),
     body("password").notEmpty().withMessage("O campo senha é obrigatório")
   ],
-  (req: Request, res: Response) => {
+  async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    loginPresenter.login(req, res);
+    await loginPresenter.login(req, res);
   }
 );
 routes.post(
@@ -89,13 +89,13 @@ routes.post(
       .notEmpty()
       .withMessage("É necessario estar logado para fazer um depósito")
   ],
-  (req: Request, res: Response) => {
+  async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    depositPresenter.deposit(req, res);
+    await depositPresenter.deposit(req, res);
   }
 );
 routes.post(
@@ -120,13 +120,13 @@ routes.post(
       })
       .withMessage("O valor mínimo de depósito é de 1.00")
   ],
-  (req: Request, res: Response) => {
+  async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    matchPresenter.bet(req, res);
+    await matchPresenter.bet(req, res);
   }
 );
 routes.post(
@@ -139,14 +139,23 @@ routes.post(
       .notEmpty()
       .withMessage("É necessário escolher um jogo para favoritar")
   ],
-  (req: Request, res: Response) => {
+  async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    matchPresenter.favorite(req, res);
+    await matchPresenter.favorite(req, res);
   }
 );
+
+routes.get("/matches", async (req: Request, res: Response) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  await matchPresenter.matches(req, res);
+});
 
 export default routes;
