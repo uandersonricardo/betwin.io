@@ -11,13 +11,13 @@ class DepositPresenter {
     this.facade = facade;
   }
 
-  public deposit(req: Request, res: Response) {
-    this.facade.createTransactionDeposit(
+  public async deposit(req: Request, res: Response) {
+    const paymentMethod = await this.facade.createTransactionDeposit(
       req.body.method,
       req.body.value,
       req.body.user
     );
-    res.status(203);
+    res.status(201).json(paymentMethod);
   }
 }
 

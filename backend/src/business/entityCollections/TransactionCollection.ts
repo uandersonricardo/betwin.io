@@ -14,8 +14,8 @@ class TransactionCollection {
     this.transactionRepository = transactionRepository;
   }
 
-  public insert(method: string, value: number, user: User) {
-    this.transactionRepository.insert(method, value, user);
+  public async insert(method: string, value: number, user: User) {
+    await this.transactionRepository.insert(method, value, user);
   }
 }
 

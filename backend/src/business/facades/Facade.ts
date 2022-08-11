@@ -51,28 +51,43 @@ class Facade {
     this.depositControl = container.resolve(DepositControl);
   }
 
-  public register(user: UserFields) {
-    return this.registerControl.register(user);
+  public async register(user: UserFields) {
+    return await this.registerControl.register(user);
   }
 
-  public login(username: string, password: string) {
-    return this.loginControl.login(username, password);
+  public async login(username: string, password: string) {
+    return await this.loginControl.login(username, password);
   }
 
-  public registerSession(user: User) {
-    return this.loginControl.registerSession(user);
+  public async registerSession(user: User) {
+    return await this.loginControl.registerSession(user);
   }
 
-  public bet(user: User, match: Match, odd: BetOdd, value: number) {
-    this.matchControl.bet(user, match, odd, value);
+  public async bet(user: User, match: Match, odd: BetOdd, value: number) {
+    await this.matchControl.bet(user, match, odd, value);
   }
 
-  public favorite(user: User, match: Match) {
-    this.matchControl.favorite(user, match);
+  public async favorite(user: User, match: Match) {
+    await this.matchControl.favorite(user, match);
   }
 
-  public createTransactionDeposit(method: string, value: number, user: User) {
-    this.depositControl.createTransactionDeposit(method, value, user);
+  public async createTransactionDeposit(
+    method: string,
+    value: number,
+    user: User
+  ) {
+    const paymenteResponse = this.depositControl.generatePayment(
+      method,
+      value,
+      user
+    );
+    await this.depositControl.createTransactionDeposit(method, value, user);
+    return paymenteResponse;
+  }
+
+  public async matches(filter: string) {
+    const matches = await this.matchControl.matches(filter);
+    return matches;
   }
 }
 

@@ -11,12 +11,12 @@ class LoginControl {
     this.userCollection = userCollection;
   }
 
-  public login(username: string, password: string) {
-    return this.userCollection.validateCredentials(username, password);
+  public async login(username: string, password: string) {
+    return await this.userCollection.validateCredentials(username, password);
   }
 
-  public registerSession(user: User) {
-    return true;
+  public async registerSession(user: User) {
+    return await true;
   }
 }
 

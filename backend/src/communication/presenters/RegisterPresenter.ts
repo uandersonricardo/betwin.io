@@ -12,7 +12,7 @@ class RegisterPresenter {
     this.facade = facade;
   }
 
-  public register(req: Request, res: Response) {
+  public async register(req: Request, res: Response) {
     const userFields = new UserFields(
       req.body.username,
       req.body.password,
@@ -20,7 +20,7 @@ class RegisterPresenter {
       req.body.cpf
     );
 
-    this.facade.register(userFields);
+    await this.facade.register(userFields);
 
     res.status(201).json();
   }

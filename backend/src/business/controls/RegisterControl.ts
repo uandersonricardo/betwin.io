@@ -17,9 +17,9 @@ class RegisterControl {
     this.accountCollection = accountCollection;
   }
 
-  public register(userFields: UserFields) {
-    const user = this.userCollection.insert(userFields);
-    this.accountCollection.insert(user);
+  public async register(userFields: UserFields) {
+    const user = await this.userCollection.insert(userFields);
+    await this.accountCollection.insert(user);
 
     return user;
   }
