@@ -3,7 +3,7 @@ import UserFields from "../../business/entities/UserFields";
 
 interface IUserRepository {
   insert(user: UserFields): Promise<User>;
-  validateCredentials(username: string, password: string): Promise<User | null>;
+  validateCredentials(username: string, password: string): Promise<User>;
 }
 
 export default IUserRepository;

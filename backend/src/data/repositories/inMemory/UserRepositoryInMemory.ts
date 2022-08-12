@@ -50,12 +50,23 @@ class UserRepositoryInMemory implements IUserRepository {
   }
 
   async validateCredentials(username: string, password: string) {
-    return (
+    const register =
       this.users.find(
         user =>
           user.getUsername() === username && user.getPassword() === password
-      ) || null
+      ) || null;
+
+    if (!register) {
+      throw new Error("User not found");
+    }
+    const user = new User(
+      register.getId(),
+      register.getUsername(),
+      register.getPassword(),
+      register.getEmail(),
+      register.getCpf()
     );
+    return user;
   }
 }
 

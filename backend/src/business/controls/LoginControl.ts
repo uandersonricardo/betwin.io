@@ -1,5 +1,8 @@
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import { injectable } from "tsyringe";
 
+import authConfig from "../../config/auth";
 import User from "../entities/User";
 import UserCollection from "../entityCollections/UserCollection";
 
@@ -11,8 +14,21 @@ class LoginControl {
     this.userCollection = userCollection;
   }
 
+  private generateToken = (params = {}) => {
+    return jwt.sign(params, authConfig.secret, { expiresIn: 86400 });
+  };
+
   public async login(username: string, password: string) {
-    return await this.userCollection.validateCredentials(username, password);
+    const user = await this.userCollection.validateCredentials(
+      username,
+      password
+    );
+
+    user.setPassword(undefined);
+
+    const token = this.generateToken({ id: user.getId() });
+
+    return { user, token };
   }
 
   public async registerSession(user: User) {
