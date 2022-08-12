@@ -1,3 +1,5 @@
+import { useContext, useState } from "react";
+
 import {
   Avatar,
   Box,
@@ -35,6 +37,7 @@ import {
 
 import logo from "../assets/logo.png";
 import DepositModal from "../components/Modals/DepositModal";
+import { AuthContext } from "../contexts/Auth";
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
@@ -42,6 +45,16 @@ interface MobileProps extends FlexProps {
 
 const Header: React.FC<MobileProps> = ({ onOpen, ...rest }) => {
   const { isOpen, onOpen: onClick, onClose } = useDisclosure();
+  const [signingOut, setSigningOut] = useState(false);
+  const { signOut } = useContext(AuthContext);
+
+  const handleSignOut = async () => {
+    setSigningOut(true);
+
+    await signOut();
+
+    setSigningOut(false);
+  };
 
   return (
     <Flex
@@ -179,8 +192,12 @@ const Header: React.FC<MobileProps> = ({ onOpen, ...rest }) => {
               </MenuItem>
               <MenuItem icon={<TbCash fontSize="1rem" />}>Sacar</MenuItem>
               <MenuDivider />
-              <MenuItem color="red.500" icon={<TbLogout fontSize="1rem" />}>
-                Sair
+              <MenuItem
+                color="red.500"
+                icon={<TbLogout fontSize="1rem" />}
+                onClick={handleSignOut}
+              >
+                {signingOut ? "Saindo..." : "Sair"}
               </MenuItem>
             </MenuList>
           </Menu>

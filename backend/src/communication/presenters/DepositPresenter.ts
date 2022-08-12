@@ -17,6 +17,7 @@ class DepositPresenter {
       req.body.value,
       req.body.user
     );
+
     res.status(201).json(paymentMethod);
   }
 }

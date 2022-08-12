@@ -1,7 +1,11 @@
 import { createContext, ReactNode, useEffect, useState } from "react";
 
+import { useToast } from "@chakra-ui/react";
+
 import useFetch from "../hooks/useFetch";
-import api from "../services/api";
+import loginRequest from "../requests/login";
+import logoutRequest from "../requests/logout";
+import registerRequest from "../requests/register";
 
 export type User = {
   id: string;
@@ -17,6 +21,7 @@ type SignInData = {
 
 type SignUpData = {
   username: string;
+  password: string;
   email: string;
   cpf: string;
 };
@@ -38,64 +43,69 @@ type AuthProviderProps = {
 };
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [hasToken, setHasToken] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
+  const toast = useToast();
 
   const { data: fetchData, error: fetchError } = useFetch(
-    "/user",
+    "/me",
     {},
     {
-      enabled: hasToken
+      enabled: !!user
     }
   );
 
   const isAuthenticated = !!user;
 
   useEffect(() => {
-    const userId = localStorage.getItem("userId");
+    const userJson = localStorage.getItem("user");
 
-    if (userId) {
-      setHasToken(true);
+    if (userJson) {
+      const user = JSON.parse(userJson) as User;
+
+      setUser(user);
     }
   }, []);
 
   useEffect(() => {
     if (fetchError) {
-      setHasToken(false);
+      localStorage.removeItem("user");
+      setUser(null);
+
+      toast({
+        title: "Atenção!",
+        description: "Entre novamente.",
+        status: "warning",
+        duration: 3000,
+        isClosable: true
+      });
     }
   }, [fetchError]);
 
   useEffect(() => {
     if (fetchData) {
-      setUser(fetchData);
+      localStorage.setItem("user", JSON.stringify(fetchData.user));
+      setUser(fetchData.user);
     }
   }, [fetchData]);
 
   const signIn = async ({ username, password }: SignInData) => {
-    const res = await api.post("/login", {
-      username,
-      password
-    });
+    const res = await loginRequest({ username, password });
 
-    localStorage.setItem("userId", res.data.userId);
+    localStorage.setItem("user", JSON.stringify(res.data.user));
 
-    setHasToken(true);
+    setUser(res.data.user);
   };
 
   const signOut = async () => {
-    await api.post("/logout").catch(() => null);
+    await logoutRequest().catch(() => null);
 
-    localStorage.removeItem("userId");
+    localStorage.removeItem("user");
 
-    setHasToken(false);
+    setUser(null);
   };
 
   const signUp = async (body: SignUpData) => {
-    const res = await api.post("/register", body);
-
-    localStorage.setItem("userId", res.data.userId);
-
-    setHasToken(true);
+    await registerRequest(body);
   };
 
   return (

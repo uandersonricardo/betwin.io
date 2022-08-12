@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { injectable } from "tsyringe";
 
-import authConfig from "../../config/auth";
+import auth from "../../config/auth";
 import User from "../entities/User";
 import UserCollection from "../entityCollections/UserCollection";
 
@@ -15,7 +15,7 @@ class LoginControl {
   }
 
   private generateToken = (params = {}) => {
-    return jwt.sign(params, authConfig.secret, { expiresIn: 86400 });
+    return jwt.sign(params, auth.secret, { expiresIn: auth.expiresIn });
   };
 
   public async login(username: string, password: string) {
