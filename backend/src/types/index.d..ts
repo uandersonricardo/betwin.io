@@ -1,12 +1,6 @@
 export type Sport = {
   id: string;
   name: string;
-  countries: Country[];
-};
-
-export type Country = {
-  id: string;
-  name: string;
   competitions: Competition[];
 };
 
@@ -33,6 +27,7 @@ export type MatchInfo = {
 
 export type Odd = {
   odd: number;
+  label: string;
   type: string;
   status: string;
 };

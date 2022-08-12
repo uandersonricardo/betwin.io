@@ -1,14 +1,14 @@
 class User {
   private id;
   private username;
-  private password;
+  private password?;
   private email;
   private cpf;
 
   constructor(
     id: string,
     username: string,
-    password: string,
+    password: any,
     email: string,
     cpf: string
   ) {
@@ -35,7 +35,7 @@ class User {
     return this.password;
   }
 
-  public setPassword(password: string) {
+  public setPassword(password?: string) {
     this.password = password;
   }
 
