@@ -5,7 +5,8 @@ import {
   useColorModeValue,
   Drawer,
   DrawerContent,
-  useDisclosure
+  useDisclosure,
+  Flex
 } from "@chakra-ui/react";
 import { IconType } from "react-icons";
 import {
@@ -16,8 +17,8 @@ import {
   TbStar
 } from "react-icons/tb";
 
-import MobileNav from "./MobileNav";
-import SidebarContent from "./SidebarContent";
+import Header from "./Header";
+import Sidebar from "./Sidebar";
 
 export interface LinkItemProps {
   name: string;
@@ -42,8 +43,8 @@ interface StructureProps {
 const Structure: React.FC<StructureProps> = ({ children }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
-    <Box minH="full" bg="gray.900">
-      <SidebarContent
+    <Flex h="full" bg="gray.900" direction="column">
+      <Sidebar
         onClose={() => onClose}
         items={LinkItems}
         display={{ base: "none", md: "block" }}
@@ -58,15 +59,26 @@ const Structure: React.FC<StructureProps> = ({ children }) => {
         size="full"
       >
         <DrawerContent>
-          <SidebarContent onClose={onClose} items={LinkItems} />
+          <Sidebar onClose={onClose} items={LinkItems} />
         </DrawerContent>
       </Drawer>
 
-      <MobileNav onOpen={onOpen} />
-      <Box ml={{ base: 0, md: 60 }} p="4">
+      <Header onOpen={onOpen} />
+      <Flex
+        ml={{ base: 0, md: 20 }}
+        bg="gray.800"
+        borderColor="gray.700"
+        borderLeft="1px"
+        borderTop="1px"
+        borderTopLeftRadius="lg"
+        flex="auto"
+        color="gray.700"
+        direction="column"
+        overflowX="hidden"
+      >
         {children}
-      </Box>
-    </Box>
+      </Flex>
+    </Flex>
   );
 };
 

@@ -2,7 +2,9 @@ import React, { lazy } from "react";
 
 const Login = lazy(() => import("../screens/Login"));
 const Register = lazy(() => import("../screens/Register"));
+const Confirmation = lazy(() => import("../screens/Confirmation"));
 const Dashboard = lazy(() => import("../screens/Dashboard"));
+const Match = lazy(() => import("../screens/Match"));
 
 type Route = {
   path: string;
@@ -19,6 +21,12 @@ const routes: Route[] = [
     isProtected: true
   },
   {
+    path: "match/:id",
+    name: "Partida",
+    component: Match,
+    isProtected: true
+  },
+  {
     path: "login",
     name: "Login",
     component: Login,
@@ -28,6 +36,12 @@ const routes: Route[] = [
     path: "register",
     name: "Cadastrar",
     component: Register,
+    isProtected: false
+  },
+  {
+    path: "confirmation",
+    name: "Confirmação de E-mail",
+    component: Confirmation,
     isProtected: false
   }
 ];
