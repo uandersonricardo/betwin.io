@@ -26,13 +26,13 @@ class LoginControl {
 
     user.setPassword(undefined);
 
-    const token = this.generateToken({ id: user.getId() });
-
-    return { user, token };
+    return user;
   }
 
   public async registerSession(user: User) {
-    return await true;
+    const token = this.generateToken({ id: user.getId() });
+
+    return token;
   }
 }
 

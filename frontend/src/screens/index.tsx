@@ -1,19 +1,20 @@
-import React from "react";
+import React, { useContext } from "react";
 
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import routes from "../config/routes";
+import { AuthContext } from "../contexts/Auth";
 import Layout from "../layout";
 import Loading from "../layout/Loading";
 
 const unprotectedRoutes = routes.filter(route => !route.isProtected);
 
 const Root = () => {
-  const logged = true;
+  const { isAuthenticated } = useContext(AuthContext);
 
   return (
     <BrowserRouter>
-      {logged ? (
+      {isAuthenticated ? (
         <Layout />
       ) : (
         <Routes>
