@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import {
   Box,
@@ -21,7 +21,8 @@ import { RiEyeFill, RiEyeOffFill } from "react-icons/ri";
 import { Link, useNavigate } from "react-router-dom";
 
 import logo from "../../assets/logo.png";
-import { registerRequest } from "../../requests/auth";
+import { AuthContext } from "../../contexts/Auth";
+import registerRequest from "../../requests/register";
 
 const Register: React.FC = () => {
   const {
@@ -29,15 +30,26 @@ const Register: React.FC = () => {
     register,
     formState: { errors, isSubmitting }
   } = useForm();
+  const { signUp } = useContext(AuthContext);
   const toast = useToast();
   const navigate = useNavigate();
   const [show, setShow] = useState(false);
 
-  const mutation = useMutation(registerRequest, {
-    onSuccess: () => {
+  const handleClick = () => setShow(!show);
+
+  const onSubmit = async (values: any) => {
+    const data = {
+      username: values.username,
+      password: values.password,
+      email: values.email,
+      cpf: values.cpf.replace(/\D/g, "")
+    };
+
+    try {
+      await signUp(data);
+
       navigate("/confirmation");
-    },
-    onError: (err: any) => {
+    } catch (err: any) {
       let message = "Não foi possível cadastrar o usuário";
 
       if (err?.response?.data?.errors) {
@@ -52,19 +64,6 @@ const Register: React.FC = () => {
         isClosable: true
       });
     }
-  });
-
-  const handleClick = () => setShow(!show);
-
-  const onSubmit = (values: any) => {
-    const data = {
-      username: values.username,
-      password: values.password,
-      email: values.email,
-      cpf: values.cpf.replace(/\D/g, "")
-    };
-
-    mutation.mutate(data);
   };
 
   return (
@@ -183,7 +182,7 @@ const Register: React.FC = () => {
             <Input
               id="email"
               type="email"
-              placeholder="Digite seu usuário"
+              placeholder="Digite seu e-mail"
               {...register("email", {
                 required: "Campo obrigatório"
               })}
@@ -217,7 +216,7 @@ const Register: React.FC = () => {
             </FormLabel>
             <Input
               id="cpf"
-              placeholder="Digite seu usuário"
+              placeholder="Digite seu CPF"
               {...register("cpf", {
                 required: "Campo obrigatório"
               })}

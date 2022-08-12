@@ -1,3 +1,4 @@
+import { compare, hash } from "bcryptjs";
 import { singleton } from "tsyringe";
 
 import User from "../../../business/entities/User";
@@ -20,6 +21,8 @@ class UserRepositoryMongo implements IUserRepository {
       throw new Error("CPF already in use");
     }
 
+    user.setPassword(await hash(user.getPassword(), 10));
+
     const mongoUser = await UserSchema.create({
       username: user.getUsername(),
       password: user.getPassword(),
@@ -40,14 +43,18 @@ class UserRepositoryMongo implements IUserRepository {
 
   async validateCredentials(username: string, password: string) {
     const mongoUser = await UserSchema.findOne({
-      username,
-      password
+      username
     });
 
     if (!mongoUser) {
       throw new Error("User not found");
     }
-    const newUser = new User(
+
+    if (!(await compare(password, mongoUser.password))) {
+      throw new Error("Invalid password");
+    }
+
+    const user = new User(
       mongoUser._id.toString(),
       mongoUser.username,
       mongoUser.password,
@@ -55,7 +62,27 @@ class UserRepositoryMongo implements IUserRepository {
       mongoUser.cpf
     );
 
-    return newUser;
+    return user;
+  }
+
+  async findById(id: string) {
+    const mongoUser = await UserSchema.findOne({
+      id
+    });
+
+    if (!mongoUser) {
+      throw new Error("User not found");
+    }
+
+    const user = new User(
+      mongoUser._id.toString(),
+      mongoUser.username,
+      mongoUser.password,
+      mongoUser.email,
+      mongoUser.cpf
+    );
+
+    return user;
   }
 }
 

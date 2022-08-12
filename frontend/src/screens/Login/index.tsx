@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import {
   Box,
@@ -12,13 +12,16 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  Text
+  Text,
+  useToast
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { RiEyeFill, RiEyeOffFill } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import logo from "../../assets/logo.png";
+import { AuthContext } from "../../contexts/Auth";
+import loginRequest from "../../requests/login";
 
 const Login: React.FC = () => {
   const {
@@ -26,17 +29,38 @@ const Login: React.FC = () => {
     register,
     formState: { errors, isSubmitting }
   } = useForm();
+  const { signIn } = useContext(AuthContext);
+  const toast = useToast();
+  const navigate = useNavigate();
   const [show, setShow] = useState(false);
 
   const handleClick = () => setShow(!show);
 
-  const onSubmit = (values: any) => {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        resolve(true);
-      }, 3000);
-    });
+  const onSubmit = async (values: any) => {
+    const data = {
+      username: values.username,
+      password: values.password
+    };
+
+    try {
+      await signIn(data);
+
+      navigate("/login");
+    } catch (err: any) {
+      let message = "Usuário ou senha inválidos";
+
+      if (err?.response?.data?.errors) {
+        message = err.response.data.errors[0].msg;
+      }
+
+      toast({
+        title: "Ops...",
+        description: message,
+        status: "error",
+        duration: 3000,
+        isClosable: true
+      });
+    }
   };
 
   return (

@@ -8,6 +8,7 @@ import IUserRepository from "../../data/repositoryInterfaces/IUserRepository";
 import DepositControl from "../controls/DepositControl";
 import LoginControl from "../controls/LoginControl";
 import MatchControl from "../controls/MatchControl";
+import MeControl from "../controls/MeControl";
 import RegisterControl from "../controls/RegisterControl";
 import BetOdd from "../entities/BetOdd";
 import Match from "../entities/Match";
@@ -21,6 +22,7 @@ class Facade {
   private repositoryFactory;
   private registerControl;
   private loginControl;
+  private meControl;
   private matchControl;
   private depositControl;
 
@@ -47,6 +49,7 @@ class Facade {
 
     this.registerControl = container.resolve(RegisterControl);
     this.loginControl = container.resolve(LoginControl);
+    this.meControl = container.resolve(MeControl);
     this.matchControl = container.resolve(MatchControl);
     this.depositControl = container.resolve(DepositControl);
   }
@@ -61,6 +64,10 @@ class Facade {
 
   public async registerSession(user: User) {
     return await this.loginControl.registerSession(user);
+  }
+
+  public async me(id: string) {
+    return await this.meControl.me(id);
   }
 
   public async bet(user: User, match: Match, odd: BetOdd, value: number) {

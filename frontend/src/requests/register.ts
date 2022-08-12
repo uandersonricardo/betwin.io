@@ -7,6 +7,8 @@ type RegisterBody = {
   cpf: string;
 };
 
-export const registerRequest = (body: RegisterBody) => {
+const registerRequest = (body: RegisterBody) => {
   return api.post("/register", body);
 };
+
+export default registerRequest;
