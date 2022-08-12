@@ -16,26 +16,41 @@ import {
   MenuList,
   Spacer,
   Text,
+  useDisclosure,
   VStack
 } from "@chakra-ui/react";
-import { TbBell, TbChevronDown, TbMenu2, TbSearch } from "react-icons/tb";
+import {
+  TbArrowsRightLeft,
+  TbBell,
+  TbCash,
+  TbChevronDown,
+  TbLogout,
+  TbMenu2,
+  TbSearch,
+  TbUser,
+  TbUserCircle,
+  TbUserPlus,
+  TbWallet
+} from "react-icons/tb";
 
 import logo from "../assets/logo.png";
+import DepositModal from "../components/Modals/DepositModal";
 
 interface MobileProps extends FlexProps {
   onOpen: () => void;
 }
 
-const MobileNav: React.FC<MobileProps> = ({ onOpen, ...rest }) => {
+const Header: React.FC<MobileProps> = ({ onOpen, ...rest }) => {
+  const { isOpen, onOpen: onClick, onClose } = useDisclosure();
+
   return (
     <Flex
-      ml={{ base: 0, md: 60 }}
+      as="header"
+      ml={{ base: 0, md: 20 }}
       px={{ base: 4, md: 4 }}
-      height="20"
+      minHeight="20"
       alignItems="center"
       bg="gray.900"
-      borderBottomWidth="1px"
-      borderBottomColor="gray.700"
       justifyContent={{ base: "start", md: "flex-end" }}
       {...rest}
     >
@@ -54,15 +69,22 @@ const MobileNav: React.FC<MobileProps> = ({ onOpen, ...rest }) => {
         }}
       />
 
-      <Image
-        src={logo}
-        alt="Logo"
-        h="6"
-        ml="2"
-        display={{ base: "flex", md: "none" }}
-      />
+      <Box
+        w={{ base: "auto", md: "72" }}
+        ml={{ base: "2", md: "0" }}
+        mr={{ base: "0", md: "4" }}
+      >
+        <Image src={logo} alt="Logo" h="6" display="flex" mr="4" />
+      </Box>
 
-      <InputGroup size="lg" display={{ base: "none", md: "flex" }} maxW="60%">
+      <Spacer display={{ base: "flex", md: "none" }} />
+
+      <InputGroup
+        size="lg"
+        display={{ base: "none", md: "flex" }}
+        mr="4"
+        flex="1"
+      >
         <Input
           pr="3rem"
           type="text"
@@ -96,9 +118,7 @@ const MobileNav: React.FC<MobileProps> = ({ onOpen, ...rest }) => {
         </InputRightElement>
       </InputGroup>
 
-      <Spacer />
-
-      <HStack spacing={{ base: "4", md: "6" }}>
+      <HStack spacing={{ base: "4", md: "6" }} ml={{ base: "4", md: "8" }}>
         <IconButton
           size="lg"
           variant="ghost"
@@ -138,8 +158,8 @@ const MobileNav: React.FC<MobileProps> = ({ onOpen, ...rest }) => {
                   <Text fontSize="sm" color="white">
                     Justina Clark
                   </Text>
-                  <Text fontSize="xs" color="gray.500">
-                    Admin
+                  <Text fontSize="xs" color="pink.500">
+                    R$5.00
                   </Text>
                 </VStack>
                 <Box display={{ base: "none", md: "flex" }} fontSize="xl">
@@ -148,17 +168,27 @@ const MobileNav: React.FC<MobileProps> = ({ onOpen, ...rest }) => {
               </HStack>
             </MenuButton>
             <MenuList bg="gray.900" borderColor="gray.700">
-              <MenuItem>Profile</MenuItem>
-              <MenuItem>Settings</MenuItem>
-              <MenuItem>Billing</MenuItem>
+              <MenuItem icon={<TbUser fontSize="1rem" />}>Perfil</MenuItem>
+              <MenuItem icon={<TbArrowsRightLeft fontSize="1rem" />}>
+                Transações
+              </MenuItem>
+              <MenuItem icon={<TbUserPlus fontSize="1rem" />}>Indicar</MenuItem>
               <MenuDivider />
-              <MenuItem>Sign out</MenuItem>
+              <MenuItem icon={<TbWallet fontSize="1rem" />} onClick={onClick}>
+                Depositar
+              </MenuItem>
+              <MenuItem icon={<TbCash fontSize="1rem" />}>Sacar</MenuItem>
+              <MenuDivider />
+              <MenuItem color="red.500" icon={<TbLogout fontSize="1rem" />}>
+                Sair
+              </MenuItem>
             </MenuList>
           </Menu>
         </Flex>
       </HStack>
+      <DepositModal isOpen={isOpen} onClose={onClose} />
     </Flex>
   );
 };
 
-export default MobileNav;
+export default Header;

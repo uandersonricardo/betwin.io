@@ -52,7 +52,7 @@ const Register: React.FC = () => {
         bg="gray.800"
         borderRadius={{ base: "0", lg: "xl" }}
         p="8"
-        w={{ base: "full", lg: "auto" }}
+        w={{ base: "full", lg: "md" }}
         minH={{ base: "full", lg: "auto" }}
         maxW="full"
         direction="column"
@@ -65,7 +65,7 @@ const Register: React.FC = () => {
           Cadastre-se no betwin.io
         </Text>
 
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
           <FormControl isInvalid={!!errors.username} mb="4">
             <FormLabel htmlFor="username" fontSize="sm" color="gray.500">
               Usuário
