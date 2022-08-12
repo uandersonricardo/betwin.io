@@ -12,13 +12,16 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  Text
+  Text,
+  useToast
 } from "@chakra-ui/react";
+import { useMutation } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 import { RiEyeFill, RiEyeOffFill } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import logo from "../../assets/logo.png";
+import { registerRequest } from "../../requests/auth";
 
 const Register: React.FC = () => {
   const {
@@ -26,17 +29,42 @@ const Register: React.FC = () => {
     register,
     formState: { errors, isSubmitting }
   } = useForm();
+  const toast = useToast();
+  const navigate = useNavigate();
   const [show, setShow] = useState(false);
+
+  const mutation = useMutation(registerRequest, {
+    onSuccess: () => {
+      navigate("/confirmation");
+    },
+    onError: (err: any) => {
+      let message = "Não foi possível cadastrar o usuário";
+
+      if (err?.response?.data?.errors) {
+        message = err.response.data.errors[0].msg;
+      }
+
+      toast({
+        title: "Ops...",
+        description: message,
+        status: "error",
+        duration: 3000,
+        isClosable: true
+      });
+    }
+  });
 
   const handleClick = () => setShow(!show);
 
   const onSubmit = (values: any) => {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        alert(JSON.stringify(values, null, 2));
-        resolve(true);
-      }, 3000);
-    });
+    const data = {
+      username: values.username,
+      password: values.password,
+      email: values.email,
+      cpf: values.cpf.replace(/\D/g, "")
+    };
+
+    mutation.mutate(data);
   };
 
   return (

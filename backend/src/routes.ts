@@ -82,9 +82,9 @@ routes.post(
       .isNumeric()
       .withMessage("O campo deve ser preenchido com números apenas")
       .custom(value => {
-        return value >= 5.0;
+        return value >= 1.0;
       })
-      .withMessage("O valor mínimo de depósito é de 5.00"),
+      .withMessage("O valor mínimo de depósito é de 1.00"),
     body("user")
       .notEmpty()
       .withMessage("É necessario estar logado para fazer um depósito")
@@ -116,9 +116,9 @@ routes.post(
       .isNumeric()
       .withMessage("O campo deve ser preenchido com números apenas")
       .custom(value => {
-        return value >= 1.0;
+        return value >= 0.5;
       })
-      .withMessage("O valor mínimo de depósito é de 1.00")
+      .withMessage("O valor mínimo de aposta é de 0.50")
   ],
   async (req: Request, res: Response) => {
     const errors = validationResult(req);

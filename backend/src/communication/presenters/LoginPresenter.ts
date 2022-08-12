@@ -18,9 +18,9 @@ class LoginPresenter {
       throw new Error("Invalid credentials");
     }
 
-    await this.facade.registerSession(user);
+    const token = await this.facade.registerSession(user);
 
-    res.status(200).json(user);
+    res.status(200).json({ user, token });
   }
 }
 
