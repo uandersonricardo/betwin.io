@@ -1,22 +1,23 @@
-import bcrypt from "bcryptjs";
-
-import Match from "../../../business/entities/Match";
-import User from "../../../business/entities/User";
 import mongoose from "../../../config/db";
 
-const FavoriteSchema = new mongoose.Schema({
+export interface IFavoriteSchema {
+  _id: mongoose.Schema.Types.ObjectId;
+  user: mongoose.Schema.Types.ObjectId;
+  match: string;
+}
+
+const FavoriteSchema = new mongoose.Schema<IFavoriteSchema>({
   user: {
-    type: User,
-    unique: true,
-    required: true,
-    lowercase: true
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
   },
   match: {
-    type: Match,
+    type: String,
     required: true
   }
 });
 
-const Favorite = mongoose.model("Transaction", FavoriteSchema);
+const Favorite = mongoose.model("Favorite", FavoriteSchema);
 
 export default Favorite;

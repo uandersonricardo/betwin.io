@@ -1,8 +1,14 @@
-import bcrypt from "bcryptjs";
-
 import mongoose from "../../../config/db";
 
-const UserSchema = new mongoose.Schema({
+export interface IUserSchema {
+  _id: mongoose.Schema.Types.ObjectId;
+  username: string;
+  email: string;
+  password: string;
+  cpf: string;
+}
+
+const UserSchema = new mongoose.Schema<IUserSchema>({
   username: {
     type: String,
     unique: true,
@@ -11,8 +17,7 @@ const UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
-    select: false
+    required: true
   },
   email: {
     type: String,

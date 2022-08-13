@@ -9,7 +9,7 @@ const Loading: React.FC = () => (
     flex="auto"
     align="center"
     justify="center"
-    bg="gray.50"
+    bg="gray.100"
   >
     <Spinner color="gray.700" size="lg" />
   </Flex>

@@ -6,7 +6,7 @@ import iSubsystemPaymentApiCommunication from "../ISubsystemPaymentApiCommunicat
 class AdapterPaymentApiCommunication
   implements iSubsystemPaymentApiCommunication
 {
-  generatePayment(value: number, user: User) {
+  public generatePayment(value: number, user: User) {
     const preference = {
       items: [
         {
@@ -35,4 +35,5 @@ class AdapterPaymentApiCommunication
     return mercadoPreference;
   }
 }
+
 export default AdapterPaymentApiCommunication;

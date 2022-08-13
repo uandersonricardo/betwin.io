@@ -12,7 +12,7 @@ class AccountRepositoryInMemory implements IAccountRepository {
     this.accounts = [];
   }
 
-  async insert(user: User) {
+  public async insert(user: User) {
     // Talvez desnecessário
     if (
       this.accounts.find(currentAccount => currentAccount.getUser() === user)
@@ -26,7 +26,7 @@ class AccountRepositoryInMemory implements IAccountRepository {
     return newAccount;
   }
 
-  async changeCash(user: User, value: number) {
+  public async changeCash(user: User, value: number) {
     const index = this.accounts.findIndex(
       currentAccount => currentAccount.getUser() === user
     );
@@ -36,6 +36,20 @@ class AccountRepositoryInMemory implements IAccountRepository {
     }
 
     this.accounts[index].setCash(this.accounts[index].getCash() - value);
+  }
+
+  public async findByUserId(userId: string) {
+    const foundAccount = this.accounts.find(
+      currentAccount => currentAccount.getUser().getId() === userId
+    );
+
+    if (!foundAccount) {
+      throw new Error("Account not found");
+    }
+
+    const account = new Account(foundAccount.getUser(), foundAccount.getCash());
+
+    return account;
   }
 }
 

@@ -46,7 +46,7 @@ interface MobileProps extends FlexProps {
 const Header: React.FC<MobileProps> = ({ onOpen, ...rest }) => {
   const { isOpen, onOpen: onClick, onClose } = useDisclosure();
   const [signingOut, setSigningOut] = useState(false);
-  const { signOut } = useContext(AuthContext);
+  const { user, cash, signOut } = useContext(AuthContext);
 
   const handleSignOut = async () => {
     setSigningOut(true);
@@ -83,7 +83,7 @@ const Header: React.FC<MobileProps> = ({ onOpen, ...rest }) => {
       />
 
       <Box
-        w={{ base: "auto", md: "72" }}
+        w={{ base: "auto", md: "80" }}
         ml={{ base: "2", md: "0" }}
         mr={{ base: "0", md: "4" }}
       >
@@ -156,23 +156,18 @@ const Header: React.FC<MobileProps> = ({ onOpen, ...rest }) => {
               _focus={{ boxShadow: "none" }}
             >
               <HStack>
-                <Avatar
-                  size={"sm"}
-                  src={
-                    "https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
-                  }
-                />
+                <Avatar size={"sm"} name={user?.username} />
                 <VStack
                   display={{ base: "none", md: "flex" }}
                   alignItems="flex-start"
                   spacing="1px"
-                  ml="2"
+                  ml="4"
                 >
                   <Text fontSize="sm" color="white">
-                    Justina Clark
+                    {user?.username}
                   </Text>
                   <Text fontSize="xs" color="pink.500">
-                    R$5.00
+                    R${cash !== null ? cash.toFixed(2) : "-.--"}
                   </Text>
                 </VStack>
                 <Box display={{ base: "none", md: "flex" }} fontSize="xl">

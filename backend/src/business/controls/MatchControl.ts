@@ -1,7 +1,8 @@
 import axios from "axios";
 import { injectable } from "tsyringe";
 
-import { MatchInfo, Sport } from "../../types/index.d.";
+import allowedSports from "../../config/sports";
+import { Sport } from "../../types/index.d.";
 import BetOdd from "../entities/BetOdd";
 import Match from "../entities/Match";
 import User from "../entities/User";
@@ -33,6 +34,12 @@ class MatchControl {
     const groupByCompetitions = (events: any[]) => {
       const competitions: any[] = [];
       events.forEach(item => {
+        const sportId = item.event.path[0].termKey;
+
+        if (!allowedSports.find(sport => sport === sportId)) {
+          return;
+        }
+
         const id = item.event.path.map((path: any) => path.termKey).join("/");
         const collection = competitions.find(
           competition => competition.id === id
@@ -55,6 +62,7 @@ class MatchControl {
       competitions.forEach(competition => {
         const item = competition.matches[0];
         const id = item.event.path[0].termKey;
+
         const collection = sports.find(sport => sport.id === id);
         if (!collection) {
           sports.push({

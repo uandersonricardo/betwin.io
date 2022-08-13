@@ -29,6 +29,7 @@ type SignUpData = {
 export interface AuthContextProps {
   isAuthenticated: boolean;
   user: User | null;
+  cash: number | null;
   signIn: (data: SignInData) => Promise<void>;
   signUp: (data: SignUpData) => Promise<void>;
   signOut: () => Promise<void>;
@@ -44,6 +45,7 @@ type AuthProviderProps = {
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [cash, setCash] = useState<number | null>(null);
   const toast = useToast();
 
   const { data: fetchData, error: fetchError } = useFetch(
@@ -51,6 +53,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     {},
     {
       enabled: !!user
+    }
+  );
+
+  const { data: fetchCashData, error: fetchCashError } = useFetch(
+    "/cash",
+    {},
+    {
+      enabled: !!user,
+      staleTime: 5 * 1000
     }
   );
 
@@ -82,11 +93,29 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, [fetchError]);
 
   useEffect(() => {
+    if (fetchCashError) {
+      toast({
+        title: "Ops...",
+        description: "Não foi possível obter o saldo.",
+        status: "error",
+        duration: 3000,
+        isClosable: true
+      });
+    }
+  }, [fetchCashError]);
+
+  useEffect(() => {
     if (fetchData) {
       localStorage.setItem("user", JSON.stringify(fetchData.user));
       setUser(fetchData.user);
     }
   }, [fetchData]);
+
+  useEffect(() => {
+    if (fetchCashData) {
+      setCash(fetchCashData.cash);
+    }
+  }, [fetchCashData]);
 
   const signIn = async ({ username, password }: SignInData) => {
     const res = await loginRequest({ username, password });
@@ -110,7 +139,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, signIn, signUp, signOut }}
+      value={{ user, cash, isAuthenticated, signIn, signUp, signOut }}
     >
       {children}
     </AuthContext.Provider>

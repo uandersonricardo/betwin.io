@@ -8,7 +8,7 @@ import UserSchema from "../../schemas/mongo/User";
 
 @singleton()
 class UserRepositoryMongo implements IUserRepository {
-  async insert(user: UserFields) {
+  public async insert(user: UserFields) {
     if (await UserSchema.findOne({ username: user.getUsername() })) {
       throw new Error("username already exists");
     }
@@ -41,7 +41,7 @@ class UserRepositoryMongo implements IUserRepository {
     return newUser;
   }
 
-  async validateCredentials(username: string, password: string) {
+  public async validateCredentials(username: string, password: string) {
     const mongoUser = await UserSchema.findOne({
       username
     });
@@ -65,9 +65,9 @@ class UserRepositoryMongo implements IUserRepository {
     return user;
   }
 
-  async findById(id: string) {
+  public async findById(id: string) {
     const mongoUser = await UserSchema.findOne({
-      id
+      _id: id
     });
 
     if (!mongoUser) {

@@ -13,18 +13,11 @@ class TransactionRepositoryInMemory implements ITransactionRepository {
     this.transactions = [];
   }
 
-  async insert(method: string, value: number, user: User) {
+  public async insert(type: string, method: string, value: number, user: User) {
     const id = uuidv4();
     const date = new Date();
 
-    const newTransaction = new Transaction(
-      id,
-      "deposit",
-      method,
-      value,
-      user,
-      date
-    );
+    const newTransaction = new Transaction(id, type, method, value, user, date);
     this.transactions.push(newTransaction);
   }
 }

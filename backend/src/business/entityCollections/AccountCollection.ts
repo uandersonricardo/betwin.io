@@ -20,6 +20,10 @@ class AccountCollection {
   public async changeCash(user: User, value: number) {
     await this.accountRepository.changeCash(user, value);
   }
+
+  public async findByUserId(userId: string) {
+    return await this.accountRepository.findByUserId(userId);
+  }
 }
 
 export default AccountCollection;

@@ -16,7 +16,7 @@ class Match {
     status: string,
     date: Date,
     time: string,
-    odds: MatchOdd[]
+    odds?: MatchOdd[]
   ) {
     this.id = id;
     this.home = home;

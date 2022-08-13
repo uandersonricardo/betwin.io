@@ -30,7 +30,7 @@ class DepositControl {
     value: number,
     user: User
   ) {
-    await this.transactionCollection.insert(method, value, user);
+    await this.transactionCollection.insert("deposit", method, value, user);
   }
 }
 
