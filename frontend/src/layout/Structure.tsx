@@ -10,7 +10,14 @@ import {
 } from "@chakra-ui/react";
 import { IconType } from "react-icons";
 import {
+  TbBallAmericanFootball,
+  TbBallBaseball,
   TbBallBasketball,
+  TbBallTennis,
+  TbBallVolleyball,
+  TbBike,
+  TbCricket,
+  TbGolf,
   TbHome,
   TbPlayerPlay,
   TbSoccerField,
@@ -33,7 +40,12 @@ const LinkItems: LinkItemProps[] = [
   { name: "Favoritos", icon: TbStar, type: "link" },
   { name: "Esportes", type: "group" },
   { name: "Futebol", icon: TbSoccerField, type: "link" },
-  { name: "Basquete", icon: TbBallBasketball, type: "link" }
+  { name: "Basquete", icon: TbBallBasketball, type: "link" },
+  { name: "Vôlei", icon: TbBallVolleyball, type: "link" },
+  { name: "Tênis", icon: TbBallTennis, type: "link" },
+  { name: "Futebol Americano", icon: TbBallAmericanFootball, type: "link" },
+  { name: "Baseball", icon: TbBallBaseball, type: "link" },
+  { name: "Cricket", icon: TbCricket, type: "link" }
 ];
 
 interface StructureProps {

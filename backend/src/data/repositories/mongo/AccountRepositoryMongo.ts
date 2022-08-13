@@ -4,16 +4,17 @@ import Account from "../../../business/entities/Account";
 import User from "../../../business/entities/User";
 import IAccountRepository from "../../repositoryInterfaces/IAccountRepository";
 import AccountSchema from "../../schemas/mongo/Account";
+import { IUserSchema } from "../../schemas/mongo/User";
 
 @singleton()
 class AccountRepositoryMongo implements IAccountRepository {
-  async insert(user: User) {
-    if (await AccountSchema.findOne({ user })) {
-      throw new Error("user already exists");
+  public async insert(user: User) {
+    if (await AccountSchema.findOne({ user: user.getId() })) {
+      throw new Error("User already exists");
     }
 
     const mongoAccount = await AccountSchema.create({
-      user,
+      user: user.getId(),
       cash: 0
     });
 
@@ -22,8 +23,8 @@ class AccountRepositoryMongo implements IAccountRepository {
     return newAccount;
   }
 
-  async changeCash(user: User, value: number) {
-    const account = await AccountSchema.findOne({ user });
+  public async changeCash(user: User, value: number) {
+    const account = await AccountSchema.findOne({ user: user.getId() });
 
     if (!account) {
       throw new Error("Account not found");
@@ -33,10 +34,32 @@ class AccountRepositoryMongo implements IAccountRepository {
       throw new Error("Not enough cash");
     }
 
-    await AccountSchema.findOneAndUpdate(
-      { user },
-      { cash: account.cash - value }
+    account.cash -= value;
+
+    await account.save();
+  }
+
+  public async findByUserId(userId: string) {
+    const mongoAccount = await AccountSchema.findOne({
+      user: userId
+    }).populate<{ user: IUserSchema }>(["user"]);
+
+    if (!mongoAccount) {
+      throw new Error("Account not found");
+    }
+
+    const account = new Account(
+      new User(
+        mongoAccount.user._id.toString(),
+        mongoAccount.user.username,
+        undefined,
+        mongoAccount.user.email,
+        mongoAccount.user.cpf
+      ),
+      mongoAccount.cash
     );
+
+    return account;
   }
 }
 

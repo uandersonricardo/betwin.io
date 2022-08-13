@@ -2,6 +2,7 @@ import { Router } from "express";
 import { container } from "tsyringe";
 
 import AuthMiddleware from "./communication/middlewares/AuthMiddleware";
+import CashPresenter from "./communication/presenters/CashPresenter";
 import DepositPresenter from "./communication/presenters/DepositPresenter";
 import LoginPresenter from "./communication/presenters/LoginPresenter";
 import LogoutPresenter from "./communication/presenters/LogoutPresenter";
@@ -22,6 +23,7 @@ const registerPresenter = container.resolve(RegisterPresenter);
 const loginPresenter = container.resolve(LoginPresenter);
 const logoutPresenter = container.resolve(LogoutPresenter);
 const mePresenter = container.resolve(MePresenter);
+const cashPresenter = container.resolve(CashPresenter);
 const matchPresenter = container.resolve(MatchPresenter);
 const depositPresenter = container.resolve(DepositPresenter);
 
@@ -48,6 +50,12 @@ routes.get(
   "/me",
   authMiddleware.verify,
   async (req, res) => await mePresenter.me(req, res)
+);
+
+routes.get(
+  "/cash",
+  authMiddleware.verify,
+  async (req, res) => await cashPresenter.cash(req, res)
 );
 
 routes.post(

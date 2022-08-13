@@ -13,7 +13,7 @@ class UserRepositoryInMemory implements IUserRepository {
     this.users = [];
   }
 
-  async insert(user: UserFields) {
+  public async insert(user: UserFields) {
     if (
       this.users.find(
         currentUser => currentUser.getUsername() === user.getUsername()
@@ -49,7 +49,7 @@ class UserRepositoryInMemory implements IUserRepository {
     return newUser;
   }
 
-  async validateCredentials(username: string, password: string) {
+  public async validateCredentials(username: string, password: string) {
     const foundUser = this.users.find(
       user => user.getUsername() === username && user.getPassword() === password
     );
@@ -69,7 +69,7 @@ class UserRepositoryInMemory implements IUserRepository {
     return user;
   }
 
-  async findById(id: string) {
+  public async findById(id: string) {
     const foundUser = this.users.find(user => user.getId() === id);
 
     if (!foundUser) {

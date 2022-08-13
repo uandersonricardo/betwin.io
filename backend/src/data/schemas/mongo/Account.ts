@@ -1,13 +1,17 @@
-import bcrypt from "bcryptjs";
-
-import User from "../../../business/entities/User";
 import mongoose from "../../../config/db";
 
-const AccountSchema = new mongoose.Schema({
+export interface IAccountSchema {
+  _id: mongoose.Schema.Types.ObjectId;
+  user: mongoose.Schema.Types.ObjectId;
+  cash: number;
+}
+
+const AccountSchema = new mongoose.Schema<IAccountSchema>({
   user: {
-    type: User,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
     required: true,
-    lowercase: true
+    unique: true
   },
   cash: {
     type: Number,
@@ -15,6 +19,6 @@ const AccountSchema = new mongoose.Schema({
   }
 });
 
-const Account = mongoose.model("User", AccountSchema);
+const Account = mongoose.model("Account", AccountSchema);
 
 export default Account;

@@ -1,14 +1,15 @@
-import bcrypt from "bcryptjs";
-
-import User from "../../../business/entities/User";
 import mongoose from "../../../config/db";
 
-const TransactionSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    unique: true,
-    required: true
-  },
+export interface ITransactionSchema {
+  _id: mongoose.Schema.Types.ObjectId;
+  user: mongoose.Schema.Types.ObjectId;
+  value: number;
+  type: string;
+  method: string;
+  date: Date;
+}
+
+const TransactionSchema = new mongoose.Schema<ITransactionSchema>({
   type: {
     type: String,
     required: true
@@ -22,10 +23,9 @@ const TransactionSchema = new mongoose.Schema({
     required: true
   },
   user: {
-    type: User,
-    unique: true,
-    required: true,
-    lowercase: true
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
   },
   date: {
     type: Date,

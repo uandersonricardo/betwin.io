@@ -46,7 +46,7 @@ const Match: React.FC = () => {
   };
 
   return (
-    <Flex direction="column" bg="gray.50" color="gray.700">
+    <Flex direction="column" bg="gray.100" color="gray.700">
       <LightMode>
         <Flex
           direction="column"

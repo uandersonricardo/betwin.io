@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 
+import { useToast } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 
+import { AuthContext } from "../contexts/Auth";
 import api from "../services/api";
 
 const useFetch = (path: string, params = {}, options = {}) => {
-  const [sessionExpired, setSessionExpired] = useState(false);
+  const toast = useToast();
+  const { signOut } = useContext(AuthContext);
 
   const { isLoading, isError, error, data, isFetching, isPreviousData } =
     useQuery(
@@ -19,9 +22,17 @@ const useFetch = (path: string, params = {}, options = {}) => {
       },
       {
         staleTime: 60 * 1000,
-        onError: (err: any) => {
+        onError: async (err: any) => {
           if (err.response?.status === 401) {
-            setSessionExpired(true);
+            toast({
+              title: "Atenção!",
+              description: "Entre novamente.",
+              status: "warning",
+              duration: 3000,
+              isClosable: true
+            });
+
+            await signOut();
           }
         },
         ...options
@@ -34,8 +45,7 @@ const useFetch = (path: string, params = {}, options = {}) => {
     error,
     data,
     isFetching,
-    isPreviousData,
-    sessionExpired
+    isPreviousData
   };
 };
 

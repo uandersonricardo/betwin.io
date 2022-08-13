@@ -6,13 +6,14 @@ import TransactionSchema from "../../schemas/mongo/Transaction";
 
 @singleton()
 class TransactionRepositoryMongo implements ITransactionRepository {
-  async insert(method: string, value: number, user: User) {
+  public async insert(type: string, method: string, value: number, user: User) {
     const date = new Date();
+
     await TransactionSchema.create({
-      type: "deposit",
+      type,
       method,
       value,
-      user,
+      user: user.getId(),
       date
     });
   }

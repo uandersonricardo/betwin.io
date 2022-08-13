@@ -1,36 +1,39 @@
-import bcrypt from "bcryptjs";
-
-import BetOdd from "../../../business/entities/BetOdd";
-import Match from "../../../business/entities/Match";
-import User from "../../../business/entities/User";
 import mongoose from "../../../config/db";
 
-const BetSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    unique: true,
-    required: true
-  },
+export interface IBetSchema {
+  _id: mongoose.Schema.Types.ObjectId;
+  value: number;
+  odd: {
+    option: string;
+    value: number;
+  };
+  user: mongoose.Schema.Types.ObjectId;
+  match: string;
+}
+
+const BetSchema = new mongoose.Schema<IBetSchema>({
   value: {
     type: Number,
     required: true
   },
   odd: {
-    type: BetOdd,
+    type: {
+      option: { type: String, required: true },
+      value: { type: Number, required: true }
+    },
     required: true
   },
   user: {
-    type: User,
-    unique: true,
-    required: true,
-    lowercase: true
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
   },
   match: {
-    type: Match,
+    type: String,
     required: true
   }
 });
 
-const Bet = mongoose.model("Transaction", BetSchema);
+const Bet = mongoose.model("Bet", BetSchema);
 
 export default Bet;

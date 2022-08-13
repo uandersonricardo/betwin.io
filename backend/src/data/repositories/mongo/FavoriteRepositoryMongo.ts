@@ -7,10 +7,10 @@ import FavoriteSchema from "../../schemas/mongo/Favorite";
 
 @singleton()
 class FavoriteRepositoryMongo implements IFavoriteRepository {
-  async insert(user: User, match: Match) {
+  public async insert(user: User, match: Match) {
     await FavoriteSchema.create({
-      user,
-      match
+      user: user.getId(),
+      match: match.getId()
     });
   }
 }

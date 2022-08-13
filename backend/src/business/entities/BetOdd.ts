@@ -3,12 +3,12 @@ import Match from "./Match";
 class BetOdd {
   private match;
   private option;
-  private odd;
+  private value;
 
-  constructor(match: Match, option: string, odd: number) {
+  constructor(match: Match, option: string, value: number) {
     this.match = match;
     this.option = option;
-    this.odd = odd;
+    this.value = value;
   }
 
   public getOption() {
@@ -19,12 +19,12 @@ class BetOdd {
     this.option = option;
   }
 
-  public getOdd() {
-    return this.odd;
+  public getValue() {
+    return this.value;
   }
 
-  public setOdd(odd: number) {
-    this.odd = odd;
+  public setValue(value: number) {
+    this.value = value;
   }
 
   public getMatch() {

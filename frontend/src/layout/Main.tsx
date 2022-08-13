@@ -14,7 +14,7 @@ const Main: React.FC = () => (
   <Flex direction="row" flex="auto" as="main" overflow="hidden">
     <LeftAside />
     <Flex
-      bg="gray.50"
+      bg="gray.100"
       flex="1"
       borderLeftWidth="1px"
       borderRightWidth="1px"

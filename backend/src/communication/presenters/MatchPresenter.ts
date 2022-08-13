@@ -15,7 +15,7 @@ class MatchPresenter {
     const matches = await this.facade.matches(
       req.query.filter?.toString() || ""
     );
-    res.status(200).json(matches);
+    res.status(200).json({ matches });
   }
 
   public async bet(req: Request, res: Response) {
