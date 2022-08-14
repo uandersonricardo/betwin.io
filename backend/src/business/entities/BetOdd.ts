@@ -1,12 +1,8 @@
-import Match from "./Match";
-
 class BetOdd {
-  private match;
   private option;
   private value;
 
-  constructor(match: Match, option: string, value: number) {
-    this.match = match;
+  constructor(option: string, value: number) {
     this.option = option;
     this.value = value;
   }
@@ -25,14 +21,6 @@ class BetOdd {
 
   public setValue(value: number) {
     this.value = value;
-  }
-
-  public getMatch() {
-    return this.match;
-  }
-
-  public setMatch(match: Match) {
-    this.match = match;
   }
 }
 

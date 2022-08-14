@@ -18,13 +18,13 @@ class AccountRepositoryMongo implements IAccountRepository {
       cash: 0
     });
 
-    const newAccount = new Account(user, mongoAccount.cash);
+    const newAccount = new Account(user.getId(), mongoAccount.cash);
 
     return newAccount;
   }
 
-  public async changeCash(user: User, value: number) {
-    const account = await AccountSchema.findOne({ user: user.getId() });
+  public async debitCash(userId: string, value: number) {
+    const account = await AccountSchema.findOne({ user: userId });
 
     if (!account) {
       throw new Error("Account not found");
@@ -39,25 +39,28 @@ class AccountRepositoryMongo implements IAccountRepository {
     await account.save();
   }
 
+  public async refoundCash(userId: string, value: number) {
+    const account = await AccountSchema.findOne({ user: userId });
+
+    if (!account) {
+      throw new Error("Account not found");
+    }
+
+    account.cash += value;
+
+    await account.save();
+  }
+
   public async findByUserId(userId: string) {
     const mongoAccount = await AccountSchema.findOne({
       user: userId
-    }).populate<{ user: IUserSchema }>(["user"]);
+    });
 
     if (!mongoAccount) {
       throw new Error("Account not found");
     }
 
-    const account = new Account(
-      new User(
-        mongoAccount.user._id.toString(),
-        mongoAccount.user.username,
-        undefined,
-        mongoAccount.user.email,
-        mongoAccount.user.cpf
-      ),
-      mongoAccount.cash
-    );
+    const account = new Account(userId, mongoAccount.cash);
 
     return account;
   }

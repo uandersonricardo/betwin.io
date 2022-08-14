@@ -6,6 +6,7 @@ export interface ITransactionSchema {
   value: number;
   type: string;
   method: string;
+  status: string;
   date: Date;
 }
 
@@ -25,6 +26,10 @@ const TransactionSchema = new mongoose.Schema<ITransactionSchema>({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+    required: true
+  },
+  status: {
+    type: String,
     required: true
   },
   date: {

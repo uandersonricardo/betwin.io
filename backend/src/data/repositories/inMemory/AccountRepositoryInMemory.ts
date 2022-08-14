@@ -13,22 +13,24 @@ class AccountRepositoryInMemory implements IAccountRepository {
   }
 
   public async insert(user: User) {
-    // Talvez desnecessário
     if (
-      this.accounts.find(currentAccount => currentAccount.getUser() === user)
+      this.accounts.find(
+        currentAccount => currentAccount.getUserId() === user.getId()
+      )
     ) {
       throw new Error("User already exists");
     }
-    const newAccount = new Account(user, 0);
+
+    const newAccount = new Account(user.getId(), 0);
 
     this.accounts.push(newAccount);
 
     return newAccount;
   }
 
-  public async changeCash(user: User, value: number) {
+  public async debitCash(userId: string, value: number) {
     const index = this.accounts.findIndex(
-      currentAccount => currentAccount.getUser() === user
+      currentAccount => currentAccount.getUserId() === userId
     );
 
     if (index && this.accounts[index].getCash() - value < 0.0) {
@@ -38,16 +40,27 @@ class AccountRepositoryInMemory implements IAccountRepository {
     this.accounts[index].setCash(this.accounts[index].getCash() - value);
   }
 
+  public async refoundCash(userId: string, value: number) {
+    const index = this.accounts.findIndex(
+      currentAccount => currentAccount.getUserId() === userId
+    );
+
+    this.accounts[index].setCash(this.accounts[index].getCash() + value);
+  }
+
   public async findByUserId(userId: string) {
     const foundAccount = this.accounts.find(
-      currentAccount => currentAccount.getUser().getId() === userId
+      currentAccount => currentAccount.getUserId() === userId
     );
 
     if (!foundAccount) {
       throw new Error("Account not found");
     }
 
-    const account = new Account(foundAccount.getUser(), foundAccount.getCash());
+    const account = new Account(
+      foundAccount.getUserId(),
+      foundAccount.getCash()
+    );
 
     return account;
   }

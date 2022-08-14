@@ -15,11 +15,15 @@ class BetRepositoryInMemory implements IBetRepository {
     this.bets = [];
   }
 
-  public async insert(user: User, match: Match, odd: BetOdd, value: number) {
+  public async insert(
+    userId: string,
+    matchId: string,
+    odd: BetOdd,
+    value: number
+  ) {
     const id = uuidv4();
-    const date = new Date();
 
-    const newBet = new Bet(id, value, odd, user, match);
+    const newBet = new Bet(id, value, odd, userId, matchId);
     this.bets.push(newBet);
   }
 }

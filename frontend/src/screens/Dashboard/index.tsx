@@ -4,40 +4,7 @@ import { Flex, Spinner, useToast, VStack } from "@chakra-ui/react";
 
 import SportSection from "../../components/Dashboard/SportSection";
 import useFetch from "../../hooks/useFetch";
-
-export type Sport = {
-  id: string;
-  name: string;
-  competitions: Competition[];
-};
-
-export type Competition = {
-  id: string;
-  name: string;
-  matches: MatchInfo[];
-};
-
-export type MatchInfo = {
-  id: string;
-  home: string;
-  away: string;
-  status: string;
-  date: string;
-  odds: Odd[];
-  currentTime?: any;
-  score?: {
-    home: string;
-    away: string;
-    info?: string;
-  };
-};
-
-export type Odd = {
-  odd: number;
-  label: string;
-  type: string;
-  status: string;
-};
+import { Sport } from "../../types";
 
 const Dashboard: React.FC = () => {
   const toast = useToast();

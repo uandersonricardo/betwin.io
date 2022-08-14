@@ -17,8 +17,12 @@ class AccountCollection {
     return await this.accountRepository.insert(user);
   }
 
-  public async changeCash(user: User, value: number) {
-    await this.accountRepository.changeCash(user, value);
+  public async debitCash(userId: string, value: number) {
+    await this.accountRepository.debitCash(userId, value);
+  }
+
+  public async refoundCash(userId: string, value: number) {
+    await this.accountRepository.refoundCash(userId, value);
   }
 
   public async findByUserId(userId: string) {

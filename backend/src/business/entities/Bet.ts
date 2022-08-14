@@ -1,26 +1,24 @@
 import BetOdd from "./BetOdd";
-import Match from "./Match";
-import User from "./User";
 
 class Bet {
   private id;
   private value;
   private odd;
-  private user;
-  private match;
+  private userId;
+  private matchId;
 
   constructor(
     id: string,
     value: number,
     odd: BetOdd,
-    user: User,
-    match: Match
+    userId: string,
+    matchId: string
   ) {
     this.id = id;
     this.value = value;
     this.odd = odd;
-    this.user = user;
-    this.match = match;
+    this.userId = userId;
+    this.matchId = matchId;
   }
 
   public getId() {
@@ -43,20 +41,20 @@ class Bet {
     this.odd = odd;
   }
 
-  public getUser() {
-    return this.user;
+  public getUserId() {
+    return this.userId;
   }
 
-  public setUser(user: User) {
-    this.user = user;
+  public setUserId(userId: string) {
+    this.userId = userId;
   }
 
-  public getMatch() {
-    return this.match;
+  public getMatchId() {
+    return this.matchId;
   }
 
-  public setMatch(match: Match) {
-    this.match = match;
+  public setMatchId(matchId: string) {
+    this.matchId = matchId;
   }
 }
 

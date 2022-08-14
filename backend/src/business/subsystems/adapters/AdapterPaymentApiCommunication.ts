@@ -1,12 +1,11 @@
 import environment from "../../../config/environment";
-import mercadopago from "../../../config/mercadoPro";
-import User from "../../entities/User";
-import iSubsystemPaymentApiCommunication from "../ISubsystemPaymentApiCommunication";
+import mercadopago from "../../../config/mercadopago";
+import ISubsystemPaymentApiCommunication from "../ISubsystemPaymentApiCommunication";
 
 class AdapterPaymentApiCommunication
-  implements iSubsystemPaymentApiCommunication
+  implements ISubsystemPaymentApiCommunication
 {
-  public generatePayment(value: number, user: User) {
+  public async generatePayment(value: number, transactionId: string) {
     const preference = {
       items: [
         {
@@ -19,20 +18,13 @@ class AdapterPaymentApiCommunication
         success: environment.appUrl,
         failure: environment.appUrl,
         pending: environment.appUrl
-      }
+      },
+      external_reference: transactionId
     };
 
-    const mercadoPreference = mercadopago.preferences
-      .create(preference)
-      .then(function (response) {
-        return {
-          id: response.body.id
-        };
-      })
-      .catch(function (error) {
-        return error;
-      });
-    return mercadoPreference;
+    const response = await mercadopago.preferences.create(preference);
+
+    return response.body.id;
   }
 }
 

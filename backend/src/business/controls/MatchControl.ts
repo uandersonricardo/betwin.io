@@ -4,7 +4,7 @@ import axios from "axios";
 import { injectable } from "tsyringe";
 
 import allowedSports from "../../config/sports";
-import { MatchInfo, Odd, OddCategory, Sport } from "../../types/index.d.";
+import { MatchInfo, Odd, OddCategory, Sport } from "../../types";
 import BetOdd from "../entities/BetOdd";
 import Match from "../entities/Match";
 import User from "../entities/User";
@@ -128,6 +128,7 @@ class MatchControl {
           categories.push({
             id,
             name: offer.criterion.label,
+            main: offer.tags.includes("MAIN"),
             odds: [...offer.outcomes]
           });
         } else {
@@ -158,6 +159,7 @@ class MatchControl {
       categories: groupByCategory(data).map((category: any) => ({
         ...category,
         odds: category.odds.map((outcome: any) => ({
+          id: outcome.id,
           odd: outcome.odds,
           label: outcome.label,
           type: outcome.type,
@@ -168,15 +170,30 @@ class MatchControl {
           lowerLimit: outcome.lowerLimit,
           upperLimit: outcome.upperLimit
         }))
-      }))
+      })),
+      competition: {
+        id: data.events[0].path.map((path: any) => path.termKey).join("/"),
+        name: data.events[0].path[data.events[0].path.length - 1].name
+      }
     };
 
     return oddsMatch;
   }
 
-  public async bet(user: User, match: Match, odd: BetOdd, value: number) {
-    await this.betCollection.insert(user, match, odd, value);
-    await this.accountCollection.changeCash(user, value);
+  public async bet(
+    userId: string,
+    matchId: string,
+    odd: BetOdd,
+    value: number
+  ) {
+    await this.accountCollection.debitCash(userId, value);
+
+    try {
+      await this.betCollection.insert(userId, matchId, odd, value);
+    } catch (err) {
+      await this.accountCollection.refoundCash(userId, value);
+      throw err;
+    }
   }
 
   public async favorite(user: User, match: Match) {

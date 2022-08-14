@@ -77,8 +77,13 @@ class Facade {
     return await this.cashControl.cash(userId);
   }
 
-  public async bet(user: User, match: Match, odd: BetOdd, value: number) {
-    await this.matchControl.bet(user, match, odd, value);
+  public async bet(
+    userId: string,
+    matchId: string,
+    odd: BetOdd,
+    value: number
+  ) {
+    await this.matchControl.bet(userId, matchId, odd, value);
   }
 
   public async favorite(user: User, match: Match) {
@@ -88,14 +93,20 @@ class Facade {
   public async createTransactionDeposit(
     method: string,
     value: number,
-    user: User
+    userId: string
   ) {
-    const paymenteResponse = this.depositControl.generatePayment(
+    const transaction = await this.depositControl.createTransactionDeposit(
       method,
       value,
-      user
+      userId
     );
-    await this.depositControl.createTransactionDeposit(method, value, user);
+
+    const paymenteResponse = await this.depositControl.generatePayment(
+      method,
+      value,
+      transaction.getId()
+    );
+
     return paymenteResponse;
   }
 

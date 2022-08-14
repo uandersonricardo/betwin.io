@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { injectable } from "tsyringe";
 
+import BetOdd from "../../business/entities/BetOdd";
 import Facade from "../../business/facades/Facade";
 
 @injectable()
@@ -25,17 +26,18 @@ class MatchPresenter {
 
   public async bet(req: Request, res: Response) {
     await this.facade.bet(
-      req.body.user,
-      req.body.match,
-      req.body.odd,
+      req.params.authenticatedUserId,
+      req.body.matchId,
+      new BetOdd(req.body.oddId, req.body.oddValue),
       req.body.value
     );
-    res.status(201);
+
+    res.status(201).json();
   }
 
   public async favorite(req: Request, res: Response) {
     await this.facade.favorite(req.body.user, req.body.match);
-    res.status(201);
+    res.status(201).json();
   }
 }
 

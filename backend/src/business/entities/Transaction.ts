@@ -5,7 +5,8 @@ class Transaction {
   private type;
   private method;
   private value;
-  private user;
+  private userId;
+  private status;
   private date;
 
   constructor(
@@ -13,14 +14,16 @@ class Transaction {
     type: string,
     method: string,
     value: number,
-    user: User,
+    userId: string,
+    status: string,
     date: Date
   ) {
     this.id = id;
     this.type = type;
     this.method = method;
     this.value = value;
-    this.user = user;
+    this.userId = userId;
+    this.status = status;
     this.date = date;
   }
 
@@ -52,12 +55,20 @@ class Transaction {
     this.value = value;
   }
 
-  public getUser() {
-    return this.user;
+  public getUserId() {
+    return this.userId;
   }
 
-  public setUser(user: User) {
-    this.user = user;
+  public setUserId(userId: string) {
+    this.userId = userId;
+  }
+
+  public getStatus() {
+    return this.status;
+  }
+
+  public setStatus(status: string) {
+    this.status = status;
   }
 
   public getDate() {

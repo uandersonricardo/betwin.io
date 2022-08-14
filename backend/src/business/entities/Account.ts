@@ -1,20 +1,18 @@
-import User from "./User";
-
 class Account {
-  private user;
+  private userId;
   private cash;
 
-  constructor(user: User, cash: number) {
-    this.user = user;
+  constructor(userId: string, cash: number) {
+    this.userId = userId;
     this.cash = cash;
   }
 
-  public getUser() {
-    return this.user;
+  public getUserId() {
+    return this.userId;
   }
 
-  public setUser(user: User) {
-    this.user = user;
+  public setUserId(userId: string) {
+    this.userId = userId;
   }
 
   public getCash() {
