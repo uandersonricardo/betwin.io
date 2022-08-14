@@ -46,6 +46,38 @@ class TransactionRepositoryInMemory implements ITransactionRepository {
 
     return newTransaction;
   }
+
+  public async updateStatus(id: string, status: string) {
+    const transaction = this.transactions.find(t => t.getId() === id);
+
+    if (!transaction) {
+      throw new Error("Transaction not found");
+    }
+
+    transaction.setStatus(status);
+
+    const newTransaction = new Transaction(
+      transaction.getId(),
+      transaction.getType(),
+      transaction.getMethod(),
+      transaction.getValue(),
+      transaction.getUserId(),
+      transaction.getStatus(),
+      transaction.getDate()
+    );
+
+    return newTransaction;
+  }
+
+  public async getStatus(id: string) {
+    const transaction = this.transactions.find(t => t.getId() === id);
+
+    if (!transaction) {
+      throw new Error("Transaction not found");
+    }
+
+    return transaction.getStatus();
+  }
 }
 
 export default TransactionRepositoryInMemory;

@@ -15,16 +15,24 @@ class AdapterPaymentApiCommunication
         }
       ],
       back_urls: {
-        success: environment.appUrl,
-        failure: environment.appUrl,
-        pending: environment.appUrl
+        success: environment.clientUrl + "/transactions",
+        failure: environment.clientUrl + "/transactions",
+        pending: environment.clientUrl + "/transactions"
       },
-      external_reference: transactionId
+      external_reference: transactionId,
+      statement_descriptor: "betwin.io",
+      notification_url: "https://eocidxvarv1c9r.m.pipedream.net" // environment.appUrl + "/deposit/event"
     };
 
     const response = await mercadopago.preferences.create(preference);
 
     return response.body.init_point;
+  }
+
+  public async getPaymentInfo(paymentId: string) {
+    const response = await mercadopago.payment.findById(Number(paymentId));
+
+    return response.body;
   }
 }
 

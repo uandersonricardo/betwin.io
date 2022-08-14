@@ -19,6 +19,7 @@ import {
   Spacer,
   Text,
   useDisclosure,
+  useToast,
   VStack
 } from "@chakra-ui/react";
 import {
@@ -44,6 +45,7 @@ interface MobileProps extends FlexProps {
 }
 
 const Header: React.FC<MobileProps> = ({ onOpen, ...rest }) => {
+  const toast = useToast();
   const { isOpen, onOpen: onClick, onClose } = useDisclosure();
   const [signingOut, setSigningOut] = useState(false);
   const { user, cash, signOut } = useContext(AuthContext);
@@ -54,6 +56,16 @@ const Header: React.FC<MobileProps> = ({ onOpen, ...rest }) => {
     await signOut();
 
     setSigningOut(false);
+  };
+
+  const handleWithdraw = () => {
+    toast({
+      title: "Ops...",
+      description: "No betwin.io você só deposita, não saca",
+      status: "error",
+      duration: 3000,
+      isClosable: true
+    });
   };
 
   return (
@@ -185,7 +197,12 @@ const Header: React.FC<MobileProps> = ({ onOpen, ...rest }) => {
               <MenuItem icon={<TbWallet fontSize="1rem" />} onClick={onClick}>
                 Depositar
               </MenuItem>
-              <MenuItem icon={<TbCash fontSize="1rem" />}>Sacar</MenuItem>
+              <MenuItem
+                icon={<TbCash fontSize="1rem" />}
+                onClick={handleWithdraw}
+              >
+                Sacar
+              </MenuItem>
               <MenuDivider />
               <MenuItem
                 color="red.500"

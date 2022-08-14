@@ -110,6 +110,10 @@ class Facade {
     return paymenteResponse;
   }
 
+  public async handleDepositEvent(method: string, paymentId: string) {
+    await this.depositControl.handleDepositEvent(method, paymentId);
+  }
+
   public async matches(filter: string) {
     const matches = await this.matchControl.matches(filter);
     return matches;

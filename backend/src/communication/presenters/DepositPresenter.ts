@@ -20,6 +20,17 @@ class DepositPresenter {
 
     res.status(201).json({ url });
   }
+
+  public async event(req: Request, res: Response) {
+    if (req.body.type === "payment") {
+      await this.facade.handleDepositEvent(
+        "mercadopago",
+        req.body.data.id.toString()
+      );
+    }
+
+    res.status(200).json();
+  }
 }
 
 export default DepositPresenter;

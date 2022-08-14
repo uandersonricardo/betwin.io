@@ -66,6 +66,11 @@ routes.post(
 );
 
 routes.post(
+  "/deposit/event",
+  async (req, res) => await depositPresenter.event(req, res)
+);
+
+routes.post(
   "/bet",
   betValidator,
   authMiddleware.verify,
