@@ -1,16 +1,13 @@
 import React, { useState } from "react";
 
 import {
-  Badge,
   Button,
   Flex,
-  Heading,
   HStack,
   Icon,
   Image,
   InputGroup,
   InputLeftElement,
-  LightMode,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -23,28 +20,12 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
-  SimpleGrid,
-  Spacer,
-  Tab,
-  Table,
-  TableContainer,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  Tbody,
-  Td,
   Text,
-  Th,
-  Thead,
-  Tr,
-  useToast,
-  VStack
+  useToast
 } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { TbSoccerField, TbWall, TbWallet } from "react-icons/tb";
+import { TbWallet } from "react-icons/tb";
 
-import mercadopago from "../../../config/mercadopago";
 import depositRequest from "../../../requests/deposit";
 
 type DepositModalProps = {
@@ -58,20 +39,11 @@ const DepositModal: React.FC<DepositModalProps> = ({ onClose, isOpen }) => {
   const [method, setMethod] = useState<string | null>(null);
   const [value, setValue] = useState("1.00");
 
-  const callCheckout = (preferenceId: string) => {
-    const checkout = mercadopago.checkout({
-      preference: {
-        id: preferenceId
-      },
-      autoOpen: true
-    });
-  };
-
   const { mutate, isLoading } = useMutation(depositRequest, {
     onSuccess: res => {
-      const { preference } = res.data;
+      const { url } = res.data;
 
-      callCheckout(preference.id);
+      window.open(url, "_blank");
 
       queryClient.invalidateQueries(["/cash"]);
 

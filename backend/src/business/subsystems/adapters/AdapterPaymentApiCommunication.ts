@@ -24,7 +24,7 @@ class AdapterPaymentApiCommunication
 
     const response = await mercadopago.preferences.create(preference);
 
-    return response.body.id;
+    return response.body.init_point;
   }
 }
 
