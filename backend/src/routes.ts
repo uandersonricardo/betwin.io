@@ -85,4 +85,10 @@ routes.get(
   async (req, res) => await matchPresenter.matches(req, res)
 );
 
+routes.get(
+  "/matches/:matchId",
+  authMiddleware.verify,
+  async (req, res) => await matchPresenter.match(req, res)
+);
+
 export default routes;
