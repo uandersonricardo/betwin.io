@@ -9,6 +9,8 @@ interface ITransactionRepository {
     status: string,
     date: Date
   ): Promise<Transaction>;
+  updateStatus(id: string, status: string): Promise<Transaction>;
+  getStatus(id: string): Promise<string>;
 }
 
 export default ITransactionRepository;

@@ -35,6 +35,37 @@ class TransactionRepositoryMongo implements ITransactionRepository {
 
     return newTransaction;
   }
+
+  public async updateStatus(id: string, status: string) {
+    const transaction = await TransactionSchema.findById(id);
+
+    if (!transaction) {
+      throw new Error("Transaction not found");
+    }
+
+    transaction.status = status;
+    await transaction.save();
+
+    return new Transaction(
+      transaction._id?.toString(),
+      transaction.type,
+      transaction.method,
+      transaction.value,
+      transaction.user?.toString(),
+      transaction.status,
+      transaction.date
+    );
+  }
+
+  public async getStatus(id: string) {
+    const transaction = await TransactionSchema.findById(id);
+
+    if (!transaction) {
+      throw new Error("Transaction not found");
+    }
+
+    return transaction.status;
+  }
 }
 
 export default TransactionRepositoryMongo;

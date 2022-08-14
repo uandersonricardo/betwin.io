@@ -33,6 +33,21 @@ class TransactionCollection {
 
     return transaction;
   }
+
+  public async updateStatus(id: string, status: string) {
+    const transaction = await this.transactionRepository.updateStatus(
+      id,
+      status
+    );
+
+    return transaction;
+  }
+
+  public async getStatus(id: string) {
+    const transaction = await this.transactionRepository.getStatus(id);
+
+    return transaction;
+  }
 }
 
 export default TransactionCollection;
