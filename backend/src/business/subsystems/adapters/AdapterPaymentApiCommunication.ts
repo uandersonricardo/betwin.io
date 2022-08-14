@@ -21,7 +21,7 @@ class AdapterPaymentApiCommunication
       },
       external_reference: transactionId,
       statement_descriptor: "betwin.io",
-      notification_url: "https://eocidxvarv1c9r.m.pipedream.net" // environment.appUrl + "/deposit/event"
+      notification_url: environment.appUrl + "/deposit/event"
     };
 
     const response = await mercadopago.preferences.create(preference);
