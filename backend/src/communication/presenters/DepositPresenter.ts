@@ -12,13 +12,13 @@ class DepositPresenter {
   }
 
   public async deposit(req: Request, res: Response) {
-    const preference = await this.facade.createTransactionDeposit(
+    const url = await this.facade.createTransactionDeposit(
       req.body.method,
       req.body.value,
       req.params.authenticatedUserId
     );
 
-    res.status(201).json({ preference });
+    res.status(201).json({ url });
   }
 }
 
