@@ -1,16 +1,12 @@
 import React, { useState } from "react";
 
 import {
-  Badge,
   Button,
   Flex,
-  Heading,
   HStack,
   Icon,
-  Image,
   InputGroup,
   InputLeftElement,
-  LightMode,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -23,38 +19,74 @@ import {
   NumberInput,
   NumberInputField,
   NumberInputStepper,
-  SimpleGrid,
-  Spacer,
-  Tab,
-  Table,
-  TableContainer,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  Tbody,
-  Td,
   Text,
-  Th,
-  Thead,
-  Tr,
-  VStack
+  useToast
 } from "@chakra-ui/react";
-import { TbDice5, TbSoccerField, TbWall, TbWallet } from "react-icons/tb";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { TbDice5 } from "react-icons/tb";
+
+import betRequest from "../../../requests/bet";
+import { MatchInfo, Odd } from "../../../types";
 
 type BetModalProps = {
   onClose: () => void;
   isOpen: boolean;
+  odd?: Odd;
+  match?: MatchInfo;
+  category?: string;
 };
 
-const BetModal: React.FC<BetModalProps> = ({ onClose, isOpen }) => {
-  const [method, setMethod] = useState<string | null>(null);
+const BetModal: React.FC<BetModalProps> = ({
+  onClose,
+  isOpen,
+  match,
+  odd,
+  category
+}) => {
+  const queryClient = useQueryClient();
+  const toast = useToast();
   const [value, setValue] = useState("1.00");
 
-  const toggleMethod = (method: string) => {
-    return () => {
-      setMethod(currentMethod => (currentMethod === method ? null : method));
+  const { mutate, isLoading } = useMutation(betRequest, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(["/cash"]);
+
+      toast({
+        title: "Parabéns!",
+        description: "A aposta foi realizada com sucesso",
+        status: "success",
+        duration: 3000,
+        isClosable: true
+      });
+
+      onClose();
+    },
+    onError: (err: any) => {
+      let message = "Não foi possível realizar a aposta";
+
+      if (err?.response?.data?.errors) {
+        message = err.response.data.errors[0].msg;
+      }
+
+      toast({
+        title: "Ops...",
+        description: message,
+        status: "error",
+        duration: 3000,
+        isClosable: true
+      });
+    }
+  });
+
+  const onSubmit = () => {
+    const data = {
+      matchId: match?.id || "",
+      oddId: odd?.id || "",
+      value: parseFloat(value),
+      oddValue: odd?.odd || 0
     };
+
+    mutate(data);
   };
 
   const changeValue = (value: string) => {
@@ -84,16 +116,19 @@ const BetModal: React.FC<BetModalProps> = ({ onClose, isOpen }) => {
             borderRadius="md"
             mb="4"
           >
-            <Text fontWeight="bold">Real Madrid x Barcelona</Text>
+            <Text fontWeight="bold">
+              {match?.home || "-"} x {match?.away || "-"}
+            </Text>
             <Text color="gray.500" size="sm">
-              Real Madrid - Total
+              {category || "-"}
             </Text>
             <Flex justify="space-between" align="center">
               <Text fontWeight="bold" size="sm">
-                Mais de 0.5
+                {odd?.line ? `(${(odd.line / 1000).toFixed(2)}) ` : ""}
+                {odd?.label || "-"}
               </Text>
               <Text fontWeight="bold" size="sm" color="pink.400">
-                1.38
+                {odd ? (odd.odd / 1000).toFixed(2) : "-"}
               </Text>
             </Flex>
           </Flex>
@@ -106,7 +141,6 @@ const BetModal: React.FC<BetModalProps> = ({ onClose, isOpen }) => {
             />
             <NumberInput
               min={0.5}
-              max={500}
               defaultValue={5}
               precision={2}
               step={0.01}
@@ -159,7 +193,7 @@ const BetModal: React.FC<BetModalProps> = ({ onClose, isOpen }) => {
           <Text textAlign="right" w="full" color="gray.500">
             Ganho potencial:{" "}
             <Text color="white" fontWeight="bold" fontSize="2xl">
-              R$123.38
+              R${((Number(value) * (odd?.odd || 0)) / 1000).toFixed(2)}
             </Text>
           </Text>
         </ModalBody>
@@ -169,6 +203,8 @@ const BetModal: React.FC<BetModalProps> = ({ onClose, isOpen }) => {
             _hover={{ bg: "pink.600 " }}
             _active={{ bg: "pink.700 " }}
             color="white"
+            isLoading={isLoading}
+            onClick={onSubmit}
           >
             Apostar
           </Button>

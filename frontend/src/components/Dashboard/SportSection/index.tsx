@@ -13,7 +13,7 @@ import {
   VStack
 } from "@chakra-ui/react";
 
-import { Sport } from "../../../screens/Dashboard";
+import { Sport } from "../../../types";
 import SportIcon from "../../Common/SportIcon";
 import CompetitionTable from "../CompetitionTable";
 

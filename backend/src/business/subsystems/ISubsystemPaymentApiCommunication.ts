@@ -1,6 +1,5 @@
-import User from "../entities/User";
-
 interface ISubsystemPaymentApiCommunication {
-  generatePayment(value: number, user: User): Promise<any>;
+  generatePayment(value: number, transactionId: string): Promise<string>;
 }
+
 export default ISubsystemPaymentApiCommunication;

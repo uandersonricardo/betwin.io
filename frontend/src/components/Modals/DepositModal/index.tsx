@@ -38,9 +38,14 @@ import {
   Th,
   Thead,
   Tr,
+  useToast,
   VStack
 } from "@chakra-ui/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TbSoccerField, TbWall, TbWallet } from "react-icons/tb";
+
+import mercadopago from "../../../config/mercadopago";
+import depositRequest from "../../../requests/deposit";
 
 type DepositModalProps = {
   onClose: () => void;
@@ -48,8 +53,55 @@ type DepositModalProps = {
 };
 
 const DepositModal: React.FC<DepositModalProps> = ({ onClose, isOpen }) => {
+  const queryClient = useQueryClient();
+  const toast = useToast();
   const [method, setMethod] = useState<string | null>(null);
   const [value, setValue] = useState("1.00");
+
+  const callCheckout = (preferenceId: string) => {
+    const checkout = mercadopago.checkout({
+      preference: {
+        id: preferenceId
+      },
+      autoOpen: true
+    });
+  };
+
+  const { mutate, isLoading } = useMutation(depositRequest, {
+    onSuccess: res => {
+      const { preference } = res.data;
+
+      callCheckout(preference.id);
+
+      queryClient.invalidateQueries(["/cash"]);
+
+      onClose();
+    },
+    onError: (err: any) => {
+      let message = "Não foi possível criar o pedido de depósito";
+
+      if (err?.response?.data?.errors) {
+        message = err.response.data.errors[0].msg;
+      }
+
+      toast({
+        title: "Ops...",
+        description: message,
+        status: "error",
+        duration: 3000,
+        isClosable: true
+      });
+    }
+  });
+
+  const onSubmit = () => {
+    const data = {
+      method: method || "",
+      value: parseFloat(value)
+    };
+
+    mutate(data);
+  };
 
   const toggleMethod = (method: string) => {
     return () => {
@@ -159,6 +211,8 @@ const DepositModal: React.FC<DepositModalProps> = ({ onClose, isOpen }) => {
             _hover={{ bg: "pink.600 " }}
             _active={{ bg: "pink.700 " }}
             color="white"
+            isLoading={isLoading}
+            onClick={onSubmit}
           >
             Depositar
           </Button>

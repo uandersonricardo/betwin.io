@@ -1,5 +1,3 @@
-import MatchOdd from "./MatchOdd";
-
 class Match {
   private id;
   private home;
@@ -7,7 +5,6 @@ class Match {
   private status;
   private date;
   private time;
-  private odds;
 
   constructor(
     id: string,
@@ -15,8 +12,7 @@ class Match {
     away: string,
     status: string,
     date: Date,
-    time: string,
-    odds?: MatchOdd[]
+    time: string
   ) {
     this.id = id;
     this.home = home;
@@ -24,7 +20,6 @@ class Match {
     this.status = status;
     this.date = date;
     this.time = time;
-    this.odds = odds;
   }
 
   public getId() {
@@ -69,14 +64,6 @@ class Match {
 
   public setTime(time: string) {
     this.time = time;
-  }
-
-  public getOdds() {
-    return this.odds;
-  }
-
-  public setOdds(odds: MatchOdd[]) {
-    this.odds = odds;
   }
 }
 

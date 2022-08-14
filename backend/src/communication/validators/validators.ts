@@ -63,20 +63,19 @@ export const depositValidator = [
     .custom(value => {
       return value >= 1.0;
     })
-    .withMessage("O valor mínimo de depósito é de 1.00"),
-  body("user")
-    .notEmpty()
-    .withMessage("É necessario estar logado para fazer um depósito")
+    .withMessage("O valor mínimo de depósito é de 1.00")
 ];
 
 export const betValidator = [
-  body("user")
-    .notEmpty()
-    .withMessage("É necessario estar logado para fazer uma aposta"),
-  body("match")
+  body("matchId")
     .notEmpty()
     .withMessage("É necessário escolher um jogo para apostar"),
-  body("odd").notEmpty().withMessage("É necessario escolher a opção de aposta"),
+  body("oddId")
+    .notEmpty()
+    .withMessage("É necessario escolher a opção de aposta"),
+  body("oddValue")
+    .notEmpty()
+    .withMessage("É necessario escolher a cotação da aposta"),
   body("value")
     .notEmpty()
     .withMessage("Definir o valor é obrigatório")
@@ -89,9 +88,6 @@ export const betValidator = [
 ];
 
 export const favoriteValidator = [
-  body("user")
-    .notEmpty()
-    .withMessage("É necessario estar logado para favoritar uma partida"),
   body("match")
     .notEmpty()
     .withMessage("É necessário escolher um jogo para favoritar")

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Accordion,
@@ -17,6 +17,7 @@ import {
   LightMode,
   SimpleGrid,
   Spacer,
+  Spinner,
   Tab,
   Table,
   TableContainer,
@@ -30,20 +31,85 @@ import {
   Th,
   Thead,
   Tr,
-  useDisclosure
+  useDisclosure,
+  useToast
 } from "@chakra-ui/react";
-import { TbSoccerField, TbStar, TbX } from "react-icons/tb";
-import { useNavigate } from "react-router-dom";
+import { TbStar, TbX } from "react-icons/tb";
+import { useNavigate, useParams } from "react-router-dom";
 
+import CategoryCard from "../../components/Match/CategoryCard";
 import BetModal from "../../components/Modals/BetModal";
+import useFetch from "../../hooks/useFetch";
+import { MatchInfo, Odd } from "../../types";
+import { getDate, getHours } from "../../utils/date";
+import { pad } from "../../utils/string";
 
 const Match: React.FC = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
+  const [match, setMatch] = useState<MatchInfo | null>(null);
+  const [selectedOdd, setSelectedOdd] = useState<Odd | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  const {
+    isLoading,
+    data: fetchData,
+    error: fetchError
+  } = useFetch(`/matches/${id}`, {}, { staleTime: 1000 * 10 });
+
+  useEffect(() => {
+    if (fetchError) {
+      toast({
+        title: "Ops...",
+        description: "Algo deu errado.",
+        status: "error",
+        duration: 3000,
+        isClosable: true
+      });
+    }
+  }, [fetchError]);
+
+  useEffect(() => {
+    if (fetchData) {
+      setMatch(fetchData.match);
+    }
+  }, [fetchData]);
+
+  const onOpen = (odd: Odd, category: string) => {
+    setSelectedCategory(category);
+    setSelectedOdd(odd);
+    setIsOpen(true);
+  };
+
+  const onClose = () => {
+    setSelectedCategory("");
+    setSelectedOdd(null);
+    setIsOpen(false);
+  };
 
   const goBack = () => {
     navigate("/");
   };
+
+  if (isLoading) {
+    return (
+      <Flex
+        direction="column"
+        bg="gray.100"
+        flex="auto"
+        color="gray.700"
+        align="center"
+        justify="center"
+      >
+        <Spinner color="gray.700" size="lg" />
+      </Flex>
+    );
+  }
+
+  const mainCategory =
+    match?.categories && match?.categories.find(category => category.main);
 
   return (
     <Flex direction="column" bg="gray.100" color="gray.700">
@@ -77,7 +143,7 @@ const Match: React.FC = () => {
                 w="6"
                 h="6"
               />
-              <Text fontWeight="bold">English Premier League</Text>
+              <Text fontWeight="bold">{match?.competition?.name}</Text>
             </Flex>
             <IconButton
               variant="outline"
@@ -97,19 +163,44 @@ const Match: React.FC = () => {
                 mb="4"
               />
               <Text fontWeight="bold" textAlign="center" fontSize="2xl">
-                Real Madrid
+                {match?.home}
               </Text>
             </Flex>
             <Flex direction="column" justify="center" align="center">
               <Text fontWeight="bold" fontSize="md" color="gray.500">
-                12 de agosto, 16:00
+                {match?.currentTime
+                  ? `${pad(match.currentTime.minute, 2)}:${pad(
+                      match.currentTime.second,
+                      2
+                    )} `
+                  : `${getDate(match?.date || "")}, ${getHours(
+                      match?.date || ""
+                    )}`}
               </Text>
               <Text fontWeight="bold" fontSize="6xl">
-                5 : 4
+                {match?.score?.home || "-"} : {match?.score?.away || "-"}
               </Text>
-              <Badge bg="red.500" color="white" px="2" py="1" borderRadius="sm">
-                Ao vivo
-              </Badge>
+              {match?.status === "STARTED" ? (
+                <Badge
+                  bg="red.500"
+                  color="white"
+                  px="2"
+                  py="1"
+                  borderRadius="sm"
+                >
+                  Ao vivo
+                </Badge>
+              ) : (
+                <Badge
+                  bg="gray.300"
+                  color="gray.700"
+                  px="2"
+                  py="1"
+                  borderRadius="sm"
+                >
+                  Em breve
+                </Badge>
+              )}
             </Flex>
             <Flex direction="column" justify="center" align="center">
               <Image
@@ -121,7 +212,7 @@ const Match: React.FC = () => {
                 mb="4"
               />
               <Text fontWeight="bold" textAlign="center" fontSize="2xl">
-                Barcelona
+                {match?.away}
               </Text>
             </Flex>
             <Flex direction="column" justify="center" align="center" mt="4">
@@ -142,9 +233,15 @@ const Match: React.FC = () => {
                 size="lg"
                 py="8"
                 w="full"
-                onClick={onOpen}
+                onClick={() =>
+                  mainCategory &&
+                  onOpen(mainCategory.odds[0], mainCategory.name)
+                }
+                isDisabled={!mainCategory || !mainCategory.odds?.length}
               >
-                2.14
+                {mainCategory && mainCategory.odds.length > 0
+                  ? (mainCategory.odds[0].odd / 1000).toFixed(2)
+                  : "-"}
               </Button>
             </Flex>
             <Flex direction="column" justify="center" align="center" mt="4">
@@ -165,9 +262,15 @@ const Match: React.FC = () => {
                 size="lg"
                 py="8"
                 w="full"
-                onClick={onOpen}
+                onClick={() =>
+                  mainCategory &&
+                  onOpen(mainCategory.odds[1], mainCategory.name)
+                }
+                isDisabled={!mainCategory || mainCategory.odds?.length < 3}
               >
-                1.32
+                {mainCategory && mainCategory.odds.length > 2
+                  ? (mainCategory.odds[1].odd / 1000).toFixed(2)
+                  : "-"}
               </Button>
             </Flex>
             <Flex direction="column" justify="center" align="center" mt="4">
@@ -188,275 +291,41 @@ const Match: React.FC = () => {
                 size="lg"
                 py="8"
                 w="full"
-                onClick={onOpen}
+                onClick={() =>
+                  mainCategory && mainCategory.odds.length > 2
+                    ? onOpen(mainCategory.odds[2], mainCategory.name)
+                    : mainCategory &&
+                      onOpen(mainCategory.odds[1], mainCategory.name)
+                }
+                isDisabled={!mainCategory || mainCategory.odds?.length < 2}
               >
-                1.09
+                {mainCategory && mainCategory.odds.length > 2
+                  ? (mainCategory.odds[2].odd / 1000).toFixed(2)
+                  : mainCategory && mainCategory.odds.length > 1
+                  ? (mainCategory.odds[1].odd / 1000).toFixed(2)
+                  : "-"}
               </Button>
             </Flex>
           </SimpleGrid>
         </Flex>
-
-        <Box w="full">
-          <Accordion defaultIndex={[0]} allowToggle maxW="full">
-            <AccordionItem maxW="full">
-              <Flex
-                direction="column"
-                bg="white"
-                border="1px solid"
-                borderColor="gray.200"
-                borderRadius="md"
-                mx="6"
-                mb="6"
-              >
-                <h2>
-                  <AccordionButton
-                    _hover={{ bg: "gray.100" }}
-                    px="4"
-                    py="4"
-                    _focusVisible={{
-                      boxShadow: "none"
-                    }}
-                  >
-                    <Box flex="1" textAlign="left">
-                      Handicap asiático - 1º Tempo
-                    </Box>
-                    <AccordionIcon />
-                  </AccordionButton>
-                </h2>
-                <AccordionPanel
-                  maxW="full"
-                  px="4"
-                  py="4"
-                  borderTop="1px solid"
-                  borderTopColor="gray.200"
-                >
-                  <SimpleGrid columns={2} spacing={4}>
-                    <Button
-                      variant="outline"
-                      w="full"
-                      size="lg"
-                      py="4"
-                      display="flex"
-                      justifyContent="space-between"
-                      borderLeft="3px solid"
-                      borderLeftColor="pink.400"
-                      _hover={{
-                        bg: "pink.400",
-                        color: "white"
-                      }}
-                      _active={{
-                        bg: "pink.500",
-                        color: "white"
-                      }}
-                      onClick={onOpen}
-                    >
-                      <Text>(-0.25) Goiás</Text>
-                      <Text>1.32</Text>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      w="full"
-                      size="lg"
-                      py="4"
-                      display="flex"
-                      justifyContent="space-between"
-                      borderLeft="3px solid"
-                      borderLeftColor="pink.400"
-                      _hover={{
-                        bg: "pink.400",
-                        color: "white"
-                      }}
-                      _active={{
-                        bg: "pink.500",
-                        color: "white"
-                      }}
-                      onClick={onOpen}
-                    >
-                      <Text>(0.25) Avaí</Text>
-                      <Text>2.17</Text>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      w="full"
-                      size="lg"
-                      py="4"
-                      display="flex"
-                      justifyContent="space-between"
-                      borderLeft="3px solid"
-                      borderLeftColor="pink.400"
-                      _hover={{
-                        bg: "pink.400",
-                        color: "white"
-                      }}
-                      _active={{
-                        bg: "pink.500",
-                        color: "white"
-                      }}
-                      onClick={onOpen}
-                    >
-                      <Text>(-0.50) Goiás</Text>
-                      <Text>3.74</Text>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      w="full"
-                      size="lg"
-                      py="4"
-                      display="flex"
-                      justifyContent="space-between"
-                      borderLeft="3px solid"
-                      borderLeftColor="pink.400"
-                      _hover={{
-                        bg: "pink.400",
-                        color: "white"
-                      }}
-                      _active={{
-                        bg: "pink.500",
-                        color: "white"
-                      }}
-                      onClick={onOpen}
-                    >
-                      <Text>(0.50) Avaí</Text>
-                      <Text>4.92</Text>
-                    </Button>
-                  </SimpleGrid>
-                </AccordionPanel>
-              </Flex>
-            </AccordionItem>
-          </Accordion>
-        </Box>
-
-        <Box w="full">
-          <Accordion defaultIndex={[0]} allowToggle maxW="full">
-            <AccordionItem maxW="full">
-              <Flex
-                direction="column"
-                bg="white"
-                border="1px solid"
-                borderColor="gray.200"
-                borderRadius="md"
-                mx="6"
-                mb="6"
-              >
-                <h2>
-                  <AccordionButton
-                    _hover={{ bg: "gray.100" }}
-                    px="4"
-                    py="4"
-                    _focusVisible={{
-                      boxShadow: "none"
-                    }}
-                  >
-                    <Box flex="1" textAlign="left">
-                      Handicap asiático - 1º Tempo
-                    </Box>
-                    <AccordionIcon />
-                  </AccordionButton>
-                </h2>
-                <AccordionPanel
-                  maxW="full"
-                  px="4"
-                  py="4"
-                  borderTop="1px solid"
-                  borderTopColor="gray.200"
-                >
-                  <SimpleGrid columns={2} spacing={4}>
-                    <Button
-                      variant="outline"
-                      w="full"
-                      size="lg"
-                      py="4"
-                      display="flex"
-                      justifyContent="space-between"
-                      borderLeft="3px solid"
-                      borderLeftColor="pink.400"
-                      _hover={{
-                        bg: "pink.400",
-                        color: "white"
-                      }}
-                      _active={{
-                        bg: "pink.500",
-                        color: "white"
-                      }}
-                      onClick={onOpen}
-                    >
-                      <Text>(-0.25) Goiás</Text>
-                      <Text>1.32</Text>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      w="full"
-                      size="lg"
-                      py="4"
-                      display="flex"
-                      justifyContent="space-between"
-                      borderLeft="3px solid"
-                      borderLeftColor="pink.400"
-                      _hover={{
-                        bg: "pink.400",
-                        color: "white"
-                      }}
-                      _active={{
-                        bg: "pink.500",
-                        color: "white"
-                      }}
-                      onClick={onOpen}
-                    >
-                      <Text>(0.25) Avaí</Text>
-                      <Text>2.17</Text>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      w="full"
-                      size="lg"
-                      py="4"
-                      display="flex"
-                      justifyContent="space-between"
-                      borderLeft="3px solid"
-                      borderLeftColor="pink.400"
-                      _hover={{
-                        bg: "pink.400",
-                        color: "white"
-                      }}
-                      _active={{
-                        bg: "pink.500",
-                        color: "white"
-                      }}
-                      onClick={onOpen}
-                    >
-                      <Text>(-0.50) Goiás</Text>
-                      <Text>3.74</Text>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      w="full"
-                      size="lg"
-                      py="4"
-                      display="flex"
-                      justifyContent="space-between"
-                      borderLeft="3px solid"
-                      borderLeftColor="pink.400"
-                      _hover={{
-                        bg: "pink.400",
-                        color: "white"
-                      }}
-                      _active={{
-                        bg: "pink.500",
-                        color: "white"
-                      }}
-                      onClick={onOpen}
-                    >
-                      <Text>(0.50) Avaí</Text>
-                      <Text>4.92</Text>
-                    </Button>
-                  </SimpleGrid>
-                </AccordionPanel>
-              </Flex>
-            </AccordionItem>
-          </Accordion>
-        </Box>
+        {match?.categories &&
+          match?.categories
+            ?.filter(category => !category.main)
+            .map(category => (
+              <CategoryCard
+                category={category}
+                key={category.id}
+                onOpen={onOpen}
+              />
+            ))}
       </LightMode>
-      <BetModal isOpen={isOpen} onClose={onClose} />
+      <BetModal
+        isOpen={isOpen}
+        onClose={onClose}
+        odd={selectedOdd || undefined}
+        match={match || undefined}
+        category={selectedCategory}
+      />
     </Flex>
   );
 };

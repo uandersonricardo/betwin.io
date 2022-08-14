@@ -23,7 +23,7 @@ class App {
     this.server.use(
       cors({
         credentials: true,
-        origin: environment.clientUrl
+        origin: [environment.clientUrl || "*", "*.mercadolibre.com"]
       })
     );
     this.server.use(cookieParser());
