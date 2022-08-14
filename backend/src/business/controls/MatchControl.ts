@@ -1,8 +1,10 @@
+import { match } from "assert";
+
 import axios from "axios";
 import { injectable } from "tsyringe";
 
 import allowedSports from "../../config/sports";
-import { Sport } from "../../types/index.d.";
+import { MatchInfo, Odd, OddCategory, Sport } from "../../types/index.d.";
 import BetOdd from "../entities/BetOdd";
 import Match from "../entities/Match";
 import User from "../entities/User";
@@ -111,6 +113,65 @@ class MatchControl {
     }));
 
     return groupedMatches;
+  }
+
+  public async match(matchId: string) {
+    const { data } = await axios.get(
+      `https://eu-offering.kambicdn.org/offering/v2018/ub/betoffer/event/${matchId}.json?lang=pt_BR`
+    );
+    const groupByCategory = (data: any) => {
+      const categories: any[] = [];
+      data.betOffers.forEach((offer: any) => {
+        const id = offer.criterion.id;
+        const collection = categories.find(categories => categories.id === id);
+        if (!collection) {
+          categories.push({
+            id,
+            name: offer.criterion.label,
+            odds: [...offer.outcomes]
+          });
+        } else {
+          collection.odds.push(...offer.outcomes);
+        }
+      });
+      return categories;
+    };
+
+    const { data: liveData } = await axios.get(
+      `https://eu-offering.kambicdn.org/offering/v2018/ub/event/${matchId}/livedata.json?lang=pt_BR&market=BR`
+    );
+
+    const oddsMatch: MatchInfo = {
+      id: matchId,
+      home: data.events[0].homeName,
+      away: data.events[0].awayName,
+      status: data.events[0].state,
+      date: data.events[0].start,
+      currentTime: liveData.liveData?.matchClock,
+      score: liveData.liveData?.score
+        ? {
+            home: liveData.liveData.score.home,
+            away: liveData.liveData.score.away,
+            info: liveData.liveData.score.info
+          }
+        : undefined,
+      categories: groupByCategory(data).map((category: any) => ({
+        ...category,
+        odds: category.odds.map((outcome: any) => ({
+          odd: outcome.odds,
+          label: outcome.label,
+          type: outcome.type,
+          status: outcome.status,
+          line: outcome.line,
+          homescore: outcome.homeScore,
+          awayscore: outcome.awayScore,
+          lowerLimit: outcome.lowerLimit,
+          upperLimit: outcome.upperLimit
+        }))
+      }))
+    };
+
+    return oddsMatch;
   }
 
   public async bet(user: User, match: Match, odd: BetOdd, value: number) {

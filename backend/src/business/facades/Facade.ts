@@ -103,6 +103,11 @@ class Facade {
     const matches = await this.matchControl.matches(filter);
     return matches;
   }
+
+  public async match(matchId: string) {
+    const match = await this.matchControl.match(matchId);
+    return match;
+  }
 }
 
 export default Facade;

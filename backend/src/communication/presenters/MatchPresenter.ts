@@ -18,6 +18,11 @@ class MatchPresenter {
     res.status(200).json({ matches });
   }
 
+  public async match(req: Request, res: Response) {
+    const match = await this.facade.match(req.params.matchId);
+    res.status(200).json({ match });
+  }
+
   public async bet(req: Request, res: Response) {
     await this.facade.bet(
       req.body.user,

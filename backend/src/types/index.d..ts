@@ -16,7 +16,8 @@ export type MatchInfo = {
   away: string;
   status: string;
   date: Date;
-  odds: Odd[];
+  odds?: Odd[];
+  categories?: OddCategory[];
   currentTime?: unknown;
   score?: {
     home: string;
@@ -30,4 +31,15 @@ export type Odd = {
   label: string;
   type: string;
   status: string;
+  line?: number;
+  homescore?: string;
+  awayscore?: string;
+  lowerLimit: string;
+  upperLimit?: string;
+};
+
+export type OddCategory = {
+  id: string;
+  name: string;
+  odds: Odd[];
 };
