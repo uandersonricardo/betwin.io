@@ -14,8 +14,8 @@ class FavoriteCollection {
     this.favoriteRepository = favoriteRepository;
   }
 
-  public async insert(user: User, match: Match) {
-    await this.favoriteRepository.insert(user, match);
+  public async insert(userId: string, matchId: string) {
+    await this.favoriteRepository.insert(userId, matchId);
   }
 }
 export default FavoriteCollection;

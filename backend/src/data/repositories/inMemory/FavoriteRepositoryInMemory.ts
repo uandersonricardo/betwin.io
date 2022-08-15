@@ -13,8 +13,9 @@ class FavoriteRepositoryInMemory implements IFavoriteRepository {
     this.favorites = [];
   }
 
-  public async insert(user: User, match: Match) {
-    const newFavorite = new Favorite(user, match);
+  public async insert(userId: string, matchId: string) {
+    const newFavorite = new Favorite(userId, matchId);
+
     this.favorites.push(newFavorite);
   }
 }

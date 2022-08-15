@@ -196,8 +196,8 @@ class MatchControl {
     }
   }
 
-  public async favorite(user: User, match: Match) {
-    await this.favoriteCollection.insert(user, match);
+  public async favorite(userId: string, matchId: string) {
+    await this.favoriteCollection.insert(userId, matchId);
   }
 }
 

@@ -12,7 +12,6 @@ import MatchControl from "../controls/MatchControl";
 import MeControl from "../controls/MeControl";
 import RegisterControl from "../controls/RegisterControl";
 import BetOdd from "../entities/BetOdd";
-import Match from "../entities/Match";
 import User from "../entities/User";
 import UserFields from "../entities/UserFields";
 import IRepositoryFactory from "../factories/IRepositoryFactory";
@@ -86,8 +85,8 @@ class Facade {
     await this.matchControl.bet(userId, matchId, odd, value);
   }
 
-  public async favorite(user: User, match: Match) {
-    await this.matchControl.favorite(user, match);
+  public async favorite(userId: string, matchId: string) {
+    await this.matchControl.favorite(userId, matchId);
   }
 
   public async createTransactionDeposit(

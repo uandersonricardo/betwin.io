@@ -1,29 +1,26 @@
-import Match from "./Match";
-import User from "./User";
-
 class Favorite {
-  private user;
-  private match;
+  private userId;
+  private matchId;
 
-  constructor(user: User, match: Match) {
-    this.match = match;
-    this.user = user;
+  constructor(userId: string, matchId: string) {
+    this.matchId = matchId;
+    this.userId = userId;
   }
 
-  public getMatch() {
-    return this.match;
+  public getMatchId() {
+    return this.matchId;
   }
 
-  public setMatch(match: Match) {
-    this.match = match;
+  public setMatchId(matchId: string) {
+    this.matchId = matchId;
   }
 
-  public getUser() {
-    return this.user;
+  public getUserId() {
+    return this.userId;
   }
 
-  public setUser(user: User) {
-    this.user = user;
+  public setUserId(userId: string) {
+    this.userId = userId;
   }
 }
 

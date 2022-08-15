@@ -16,11 +16,13 @@ class MatchPresenter {
     const matches = await this.facade.matches(
       req.query.filter?.toString() || ""
     );
+
     res.status(200).json({ matches });
   }
 
   public async match(req: Request, res: Response) {
     const match = await this.facade.match(req.params.matchId);
+
     res.status(200).json({ match });
   }
 
@@ -36,7 +38,11 @@ class MatchPresenter {
   }
 
   public async favorite(req: Request, res: Response) {
-    await this.facade.favorite(req.body.user, req.body.match);
+    await this.facade.favorite(
+      req.params.authenticatedUserId,
+      req.body.matchId
+    );
+
     res.status(201).json();
   }
 }
