@@ -29,8 +29,8 @@ class LoginControl {
     return user;
   }
 
-  public async registerSession(user: User) {
-    const token = this.generateToken({ id: user.getId() });
+  public async registerSession(userId: string) {
+    const token = this.generateToken({ id: userId });
 
     return token;
   }

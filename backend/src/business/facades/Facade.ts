@@ -64,8 +64,8 @@ class Facade {
     return await this.loginControl.login(username, password);
   }
 
-  public async registerSession(user: User) {
-    return await this.loginControl.registerSession(user);
+  public async registerSession(userId: string) {
+    return await this.loginControl.registerSession(userId);
   }
 
   public async me(id: string) {
