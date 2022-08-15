@@ -5,6 +5,7 @@ const Register = lazy(() => import("../screens/Register"));
 const Confirmation = lazy(() => import("../screens/Confirmation"));
 const Dashboard = lazy(() => import("../screens/Dashboard"));
 const Match = lazy(() => import("../screens/Match"));
+const Transactions = lazy(() => import("../screens/Transactions"));
 
 type Route = {
   path: string;
@@ -24,6 +25,12 @@ const routes: Route[] = [
     path: "match/:id",
     name: "Partida",
     component: Match,
+    isProtected: true
+  },
+  {
+    path: "transactions",
+    name: "Transações",
+    component: Transactions,
     isProtected: true
   },
   {

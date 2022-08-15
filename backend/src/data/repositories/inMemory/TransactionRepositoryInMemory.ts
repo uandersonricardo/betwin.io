@@ -78,6 +78,26 @@ class TransactionRepositoryInMemory implements ITransactionRepository {
 
     return transaction.getStatus();
   }
+
+  public async getByUserId(userId: string) {
+    const transactions = this.transactions.filter(
+      t => t.getUserId() === userId
+    );
+
+    return transactions
+      .map(transaction => {
+        return new Transaction(
+          transaction.getId(),
+          transaction.getType(),
+          transaction.getMethod(),
+          transaction.getValue(),
+          transaction.getUserId(),
+          transaction.getStatus(),
+          transaction.getDate()
+        );
+      })
+      .reverse();
+  }
 }
 
 export default TransactionRepositoryInMemory;

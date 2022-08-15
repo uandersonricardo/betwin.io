@@ -1,5 +1,3 @@
-import User from "./User";
-
 class Transaction {
   private id;
   private type;

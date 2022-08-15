@@ -13,15 +13,16 @@ import {
   VStack
 } from "@chakra-ui/react";
 
-import { Sport } from "../../../types";
+import { MatchInfo, Odd, Sport } from "../../../types";
 import SportIcon from "../../Common/SportIcon";
 import CompetitionTable from "../CompetitionTable";
 
 type SportSectionProps = {
   sport: Sport;
+  onOpen: (match: MatchInfo, odd: Odd, category: string) => void;
 };
 
-const SportSection: React.FC<SportSectionProps> = ({ sport }) => {
+const SportSection: React.FC<SportSectionProps> = ({ sport, onOpen }) => {
   return (
     <Flex
       as="section"
@@ -66,12 +67,6 @@ const SportSection: React.FC<SportSectionProps> = ({ sport }) => {
             _selected={{ color: "pink.500", borderColor: "pink.500" }}
             fontWeight="semibold"
           >
-            Encerrados
-          </Tab>
-          <Tab
-            _selected={{ color: "pink.500", borderColor: "pink.500" }}
-            fontWeight="semibold"
-          >
             A seguir
           </Tab>
         </TabList>
@@ -83,18 +78,16 @@ const SportSection: React.FC<SportSectionProps> = ({ sport }) => {
                 <CompetitionTable
                   key={competition.id}
                   competition={competition}
+                  onOpen={onOpen}
                 />
               ))}
             </VStack>
           </TabPanel>
-          <TabPanel>
-            <p>two!</p>
+          <TabPanel p="0">
+            <p>Ao vivo!</p>
           </TabPanel>
-          <TabPanel>
-            <p>three!</p>
-          </TabPanel>
-          <TabPanel>
-            <p>four!</p>
+          <TabPanel p="0">
+            <p>A seguir!</p>
           </TabPanel>
         </TabPanels>
       </Tabs>

@@ -2,32 +2,36 @@ import { compare, hash } from "bcryptjs";
 import { singleton } from "tsyringe";
 
 import User from "../../../business/entities/User";
-import UserFields from "../../../business/entities/UserFields";
 import IUserRepository from "../../repositoryInterfaces/IUserRepository";
 import UserSchema from "../../schemas/mongo/User";
 
 @singleton()
 class UserRepositoryMongo implements IUserRepository {
-  public async insert(user: UserFields) {
-    if (await UserSchema.findOne({ username: user.getUsername() })) {
-      throw new Error("username already exists");
+  public async insert(
+    username: string,
+    password: string,
+    email: string,
+    cpf: string
+  ) {
+    if (await UserSchema.findOne({ username })) {
+      throw new Error("Username already exists");
     }
 
-    if (await UserSchema.findOne({ email: user.getEmail() })) {
+    if (await UserSchema.findOne({ email })) {
       throw new Error("Email already exists");
     }
 
-    if (await UserSchema.findOne({ cpf: user.getCpf() })) {
+    if (await UserSchema.findOne({ cpf })) {
       throw new Error("CPF already in use");
     }
 
-    user.setPassword(await hash(user.getPassword(), 10));
+    const hashedPassword = await hash(password, 10);
 
     const mongoUser = await UserSchema.create({
-      username: user.getUsername(),
-      password: user.getPassword(),
-      email: user.getEmail(),
-      cpf: user.getCpf()
+      username,
+      password: hashedPassword,
+      email,
+      cpf
     });
 
     const newUser = new User(

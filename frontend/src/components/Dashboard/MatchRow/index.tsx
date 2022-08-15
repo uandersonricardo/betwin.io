@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-import { Badge, Button, Td, Text, Tr } from "@chakra-ui/react";
+import { Badge, Button, Grid, GridItem, Text, Tr } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 
-import { MatchInfo } from "../../../types";
+import { MatchInfo, Odd } from "../../../types";
 import { getDate, getHours } from "../../../utils/date";
 import { pad } from "../../../utils/string";
 
 type MatchRowProps = {
   match: MatchInfo;
+  onOpen: (match: MatchInfo, odd: Odd, category: string) => void;
 };
 
-const MatchRow: React.FC<MatchRowProps> = ({ match }) => {
+const MatchRow: React.FC<MatchRowProps> = ({ match, onOpen }) => {
   const navigate = useNavigate();
 
   const navigateToMatch = (id: string) => {
@@ -20,20 +21,34 @@ const MatchRow: React.FC<MatchRowProps> = ({ match }) => {
     };
   };
 
+  const onClick = (index: number) => {
+    return (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+      e.stopPropagation();
+
+      if (match.odds) {
+        onOpen(match, match.odds[index], match.oddsCategory || "");
+      }
+    };
+  };
+
   return (
-    <Tr
+    <Grid
+      templateColumns="5rem 5rem 1fr 5rem 1fr 4rem 4rem 4rem"
+      gap={4}
       _hover={{ bg: "gray.100" }}
       cursor="pointer"
       onClick={navigateToMatch(match.id)}
-      display="flex"
+      w="full"
+      overflow="hidden"
+      borderBottom="1px solid"
+      borderColor="gray.200"
+      alignItems="center"
+      px="8"
+      py="4"
+      borderLeftWidth={match.status === "STARTED" ? "3px" : "0px"}
+      borderLeftColor="red.500"
     >
-      <Td
-        borderColor="gray.200"
-        borderLeftWidth="3px"
-        borderLeftColor="red.500"
-        textAlign="center"
-        flex="1"
-      >
+      <GridItem>
         {match.status === "STARTED" ? (
           <>
             <Text fontWeight="bold">
@@ -62,57 +77,104 @@ const MatchRow: React.FC<MatchRowProps> = ({ match }) => {
             </Text>
           </>
         )}
-      </Td>
-      <Td maxW="6" borderColor="gray.200" flex="1">
+      </GridItem>
+      <GridItem>
         {match.status === "STARTED" && (
-          <Badge bg="red.500" color="white">
+          <Badge bg="red.500" color="white" textAlign="center">
             Ao vivo
           </Badge>
         )}
-      </Td>
-      <Td borderColor="gray.200" flex="4">
+      </GridItem>
+      <GridItem>
         <Text fontWeight="bold">{match.home}</Text>
-      </Td>
-      <Td borderColor="gray.200" textAlign="center" flex="1">
+      </GridItem>
+      <GridItem textAlign="center">
         <Badge
           bg="gray.700"
           color="white"
-          mx="4"
           fontSize="md"
           borderRadius="sm"
           py="0.5"
           px="2"
+          w="full"
+          textAlign="center"
         >
           {match.score?.home ?? "-"} : {match.score?.away ?? "-"}
         </Badge>
-      </Td>
-      <Td borderColor="gray.200" textAlign="right" flex="4">
+      </GridItem>
+      <GridItem textAlign="right">
         <Text fontWeight="bold">{match.away}</Text>
-      </Td>
-      <Td borderColor="gray.200" textAlign="center" flex="1">
+      </GridItem>
+      <GridItem textAlign="center">
         {!match.odds || match.odds.length === 0 ? (
-          <Button variant="outline" size="sm" isDisabled>
+          <Button
+            variant="outline"
+            size="sm"
+            isDisabled
+            w="full"
+            _hover={{ bg: "pink.400", color: "white" }}
+            _active={{ bg: "pink.500", color: "white" }}
+          >
             -
           </Button>
-        ) : match.odds.length > 2 ? (
+        ) : (
           <Button
             variant="outline"
             size="sm"
             isDisabled={
               !match.odds[0].odd || match.odds[0].status === "SUSPENDED"
             }
+            w="full"
+            _hover={{ bg: "pink.400", color: "white" }}
+            _active={{ bg: "pink.500", color: "white" }}
+            onClick={onClick(0)}
           >
             {!match.odds[0].odd || match.odds[0].status === "SUSPENDED"
               ? "-"
               : (match.odds[0].odd / 1000).toFixed(2)}
           </Button>
-        ) : (
-          ""
         )}
-      </Td>
-      <Td borderColor="gray.200" textAlign="center" flex="1">
-        {!match.odds || match.odds.length === 0 ? (
-          <Button variant="outline" size="sm" isDisabled>
+      </GridItem>
+      <GridItem textAlign="center">
+        {!match.odds || match.odds.length < 3 ? (
+          <Button
+            variant="outline"
+            size="sm"
+            isDisabled
+            w="full"
+            _hover={{ bg: "pink.400", color: "white" }}
+            _active={{ bg: "pink.500", color: "white" }}
+          >
+            -
+          </Button>
+        ) : (
+          <Button
+            variant="outline"
+            size="sm"
+            isDisabled={
+              !match.odds[1].odd || match.odds[1].status === "SUSPENDED"
+            }
+            w="full"
+            _hover={{ bg: "pink.400", color: "white" }}
+            _active={{ bg: "pink.500", color: "white" }}
+            onClick={onClick(1)}
+          >
+            {!match.odds[1].odd || match.odds[1].status === "SUSPENDED"
+              ? "-"
+              : (match.odds[1].odd / 1000).toFixed(2)}
+          </Button>
+        )}
+      </GridItem>
+      <GridItem textAlign="center">
+        {!match.odds || match.odds.length < 2 ? (
+          <Button
+            variant="outline"
+            size="sm"
+            isDisabled
+            w="full"
+            _hover={{ bg: "pink.400", color: "white" }}
+            _active={{ bg: "pink.500", color: "white" }}
+          >
             -
           </Button>
         ) : match.odds.length === 2 ? (
@@ -120,75 +182,36 @@ const MatchRow: React.FC<MatchRowProps> = ({ match }) => {
             variant="outline"
             size="sm"
             isDisabled={
-              !match.odds[0].odd || match.odds[0].status === "SUSPENDED"
-            }
-          >
-            {!match.odds[0].odd || match.odds[0].status === "SUSPENDED"
-              ? "-"
-              : (match.odds[0].odd / 1000).toFixed(2)}
-          </Button>
-        ) : match.odds.length > 2 ? (
-          <Button
-            variant="outline"
-            size="sm"
-            isDisabled={
               !match.odds[1].odd || match.odds[1].status === "SUSPENDED"
             }
+            w="full"
+            _hover={{ bg: "pink.400", color: "white" }}
+            _active={{ bg: "pink.500", color: "white" }}
+            onClick={onClick(1)}
           >
             {!match.odds[1].odd || match.odds[1].status === "SUSPENDED"
               ? "-"
               : (match.odds[1].odd / 1000).toFixed(2)}
           </Button>
         ) : (
-          <></>
-        )}
-      </Td>
-      <Td borderColor="gray.200" textAlign="center" flex="1">
-        {!match.odds || match.odds.length === 0 ? (
-          <Button variant="outline" size="sm" isDisabled>
-            -
-          </Button>
-        ) : match.odds.length === 1 ? (
-          <Button
-            variant="outline"
-            size="sm"
-            isDisabled={
-              !match.odds[0].odd || match.odds[0].status === "SUSPENDED"
-            }
-          >
-            {!match.odds[0].odd || match.odds[0].status === "SUSPENDED"
-              ? "-"
-              : (match.odds[0].odd / 1000).toFixed(2)}
-          </Button>
-        ) : match.odds.length === 2 ? (
-          <Button
-            variant="outline"
-            size="sm"
-            isDisabled={
-              !match.odds[1].odd || match.odds[1].status === "SUSPENDED"
-            }
-          >
-            {!match.odds[1].odd || match.odds[1].status === "SUSPENDED"
-              ? "-"
-              : (match.odds[1].odd / 1000).toFixed(2)}
-          </Button>
-        ) : match.odds.length > 2 ? (
           <Button
             variant="outline"
             size="sm"
             isDisabled={
               !match.odds[2].odd || match.odds[2].status === "SUSPENDED"
             }
+            w="full"
+            _hover={{ bg: "pink.400", color: "white" }}
+            _active={{ bg: "pink.500", color: "white" }}
+            onClick={onClick(2)}
           >
             {!match.odds[2].odd || match.odds[2].status === "SUSPENDED"
               ? "-"
               : (match.odds[2].odd / 1000).toFixed(2)}
           </Button>
-        ) : (
-          ""
         )}
-      </Td>
-    </Tr>
+      </GridItem>
+    </Grid>
   );
 };
 

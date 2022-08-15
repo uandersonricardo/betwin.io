@@ -1,32 +1,20 @@
 import React, { useEffect, useState } from "react";
 
-import {
-  Badge,
-  Button,
-  Flex,
-  Icon,
-  LightMode,
-  Table,
-  TableContainer,
-  Tbody,
-  Td,
-  Text,
-  Th,
-  Thead,
-  Tr
-} from "@chakra-ui/react";
+import { Flex, Grid, GridItem, Icon, LightMode, Text } from "@chakra-ui/react";
 import { TbTrophy } from "react-icons/tb";
 
-import { Competition } from "../../../types";
-import { getDate, getHours } from "../../../utils/date";
-import { pad } from "../../../utils/string";
+import { Competition, MatchInfo, Odd } from "../../../types";
 import MatchRow from "../MatchRow";
 
 type CompetitionTableProps = {
   competition: Competition;
+  onOpen: (match: MatchInfo, odd: Odd, category: string) => void;
 };
 
-const CompetitionTable: React.FC<CompetitionTableProps> = ({ competition }) => {
+const CompetitionTable: React.FC<CompetitionTableProps> = ({
+  competition,
+  onOpen
+}) => {
   return (
     <Flex direction="column" w="full">
       <Flex
@@ -46,39 +34,38 @@ const CompetitionTable: React.FC<CompetitionTableProps> = ({ competition }) => {
         </Text>
       </Flex>
       <LightMode>
-        <TableContainer w="full">
-          <Table bg="white">
-            <Thead>
-              <Tr bg="gray.50" display="flex" w="full">
-                <Th maxW="6" borderColor="gray.200" flex="1">
-                  Tempo
-                </Th>
-                <Th maxW="6" borderColor="gray.200" flex="1">
-                  Status
-                </Th>
-                <Th borderColor="gray.200" flex="4">
-                  Partida
-                </Th>
-                <Th borderColor="gray.200" flex="1"></Th>
-                <Th borderColor="gray.200" flex="4"></Th>
-                <Th textAlign="center" maxW="4" borderColor="gray.200" flex="1">
-                  1
-                </Th>
-                <Th textAlign="center" maxW="4" borderColor="gray.200" flex="1">
-                  X
-                </Th>
-                <Th textAlign="center" maxW="4" borderColor="gray.200" flex="1">
-                  2
-                </Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {competition.matches.map(match => (
-                <MatchRow key={match.id} match={match} />
-              ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
+        <Flex direction="column" bg="white" w="full" overflow="hidden">
+          <Grid
+            w="full"
+            templateColumns="5rem 5rem 1fr 4rem 4rem 4rem"
+            gap={4}
+            bg="gray.50"
+            borderBottom="1px solid"
+            borderColor="gray.200"
+            py="3"
+            px="8"
+            textTransform="uppercase"
+            fontWeight="bold"
+            fontSize="xs"
+            color="gray.600"
+          >
+            <GridItem>Tempo</GridItem>
+            <GridItem>Status</GridItem>
+            <GridItem>Partida</GridItem>
+            <GridItem textAlign="center" justifySelf="center">
+              1
+            </GridItem>
+            <GridItem textAlign="center" justifySelf="center">
+              X
+            </GridItem>
+            <GridItem textAlign="center" justifySelf="center">
+              2
+            </GridItem>
+          </Grid>
+          {competition.matches.map(match => (
+            <MatchRow key={match.id} match={match} onOpen={onOpen} />
+          ))}
+        </Flex>
       </LightMode>
     </Flex>
   );

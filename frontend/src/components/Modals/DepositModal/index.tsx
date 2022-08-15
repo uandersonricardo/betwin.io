@@ -25,6 +25,7 @@ import {
 } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { TbWallet } from "react-icons/tb";
+import { useNavigate } from "react-router-dom";
 
 import depositRequest from "../../../requests/deposit";
 
@@ -35,6 +36,7 @@ type DepositModalProps = {
 
 const DepositModal: React.FC<DepositModalProps> = ({ onClose, isOpen }) => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const toast = useToast();
   const [method, setMethod] = useState<string | null>(null);
   const [value, setValue] = useState("1.00");

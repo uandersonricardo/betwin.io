@@ -1,42 +1,20 @@
 import React, { useEffect, useState } from "react";
 
 import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
   Badge,
-  Box,
   Button,
   Flex,
-  Heading,
-  Icon,
   IconButton,
   Image,
   LightMode,
   SimpleGrid,
-  Spacer,
-  Spinner,
-  Tab,
-  Table,
-  TableContainer,
-  TabList,
-  TabPanel,
-  TabPanels,
-  Tabs,
-  Tbody,
-  Td,
   Text,
-  Th,
-  Thead,
-  Tr,
-  useDisclosure,
   useToast
 } from "@chakra-ui/react";
 import { TbStar, TbX } from "react-icons/tb";
 import { useNavigate, useParams } from "react-router-dom";
 
+import Loading from "../../components/Common/Loading";
 import CategoryCard from "../../components/Match/CategoryCard";
 import BetModal from "../../components/Modals/BetModal";
 import useFetch from "../../hooks/useFetch";
@@ -94,18 +72,7 @@ const Match: React.FC = () => {
   };
 
   if (isLoading) {
-    return (
-      <Flex
-        direction="column"
-        bg="gray.100"
-        flex="auto"
-        color="gray.700"
-        align="center"
-        justify="center"
-      >
-        <Spinner color="gray.700" size="lg" />
-      </Flex>
-    );
+    return <Loading />;
   }
 
   const mainCategory =

@@ -16,6 +16,7 @@ export type MatchInfo = {
   away: string;
   status: string;
   date: string;
+  oddsCategory?: string;
   odds?: Odd[];
   categories?: OddCategory[];
   currentTime?: any;
@@ -48,4 +49,14 @@ export type OddCategory = {
   name: string;
   main: boolean;
   odds: Odd[];
+};
+
+export type Transaction = {
+  id: string;
+  type: string;
+  method: string;
+  value: number;
+  userId: string;
+  status: string;
+  date: string;
 };

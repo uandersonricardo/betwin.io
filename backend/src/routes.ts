@@ -9,6 +9,7 @@ import LogoutPresenter from "./communication/presenters/LogoutPresenter";
 import MatchPresenter from "./communication/presenters/MatchPresenter";
 import MePresenter from "./communication/presenters/MePresenter";
 import RegisterPresenter from "./communication/presenters/RegisterPresenter";
+import TransactionPresenter from "./communication/presenters/TransactionPresenter";
 import {
   betValidator,
   depositValidator,
@@ -26,6 +27,7 @@ const mePresenter = container.resolve(MePresenter);
 const cashPresenter = container.resolve(CashPresenter);
 const matchPresenter = container.resolve(MatchPresenter);
 const depositPresenter = container.resolve(DepositPresenter);
+const transactionPresenter = container.resolve(TransactionPresenter);
 
 const routes = Router();
 
@@ -94,6 +96,12 @@ routes.get(
   "/matches/:matchId",
   authMiddleware.verify,
   async (req, res) => await matchPresenter.match(req, res)
+);
+
+routes.get(
+  "/transactions",
+  authMiddleware.verify,
+  async (req, res) => await transactionPresenter.transactions(req, res)
 );
 
 export default routes;

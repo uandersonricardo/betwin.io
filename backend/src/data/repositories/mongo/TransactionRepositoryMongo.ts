@@ -66,6 +66,24 @@ class TransactionRepositoryMongo implements ITransactionRepository {
 
     return transaction.status;
   }
+
+  public async getByUserId(userId: string) {
+    const transactions = await TransactionSchema.find({ user: userId }, null, {
+      sort: { date: -1 }
+    });
+
+    return transactions.map(transaction => {
+      return new Transaction(
+        transaction._id?.toString(),
+        transaction.type,
+        transaction.method,
+        transaction.value,
+        transaction.user?.toString(),
+        transaction.status,
+        transaction.date
+      );
+    });
+  }
 }
 
 export default TransactionRepositoryMongo;

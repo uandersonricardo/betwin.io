@@ -48,6 +48,12 @@ class TransactionCollection {
 
     return transaction;
   }
+
+  public async getByUserId(userId: string) {
+    const transactions = await this.transactionRepository.getByUserId(userId);
+
+    return transactions;
+  }
 }
 
 export default TransactionCollection;

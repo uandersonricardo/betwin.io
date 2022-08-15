@@ -11,6 +11,7 @@ interface ITransactionRepository {
   ): Promise<Transaction>;
   updateStatus(id: string, status: string): Promise<Transaction>;
   getStatus(id: string): Promise<string>;
+  getByUserId(userId: string): Promise<Transaction[]>;
 }
 
 export default ITransactionRepository;

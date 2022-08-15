@@ -91,9 +91,14 @@ class MatchControl {
           away: match.event.awayName,
           date: new Date(match.event.start),
           status: match.event.state,
+          oddsCategory:
+            match.betOffers.length > 0
+              ? match.betOffers[0].criterion.label
+              : undefined,
           odds:
             match.betOffers.length > 0
               ? match.betOffers[0].outcomes?.map((outcome: any) => ({
+                  id: outcome.id,
                   odd: outcome.odds,
                   label: outcome.label,
                   type: outcome.type,

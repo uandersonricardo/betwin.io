@@ -16,6 +16,7 @@ export type MatchInfo = {
   away: string;
   status: string;
   date: Date;
+  oddsCategory?: string;
   odds?: Odd[];
   categories?: OddCategory[];
   currentTime?: unknown;
