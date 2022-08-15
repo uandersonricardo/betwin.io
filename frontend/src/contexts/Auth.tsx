@@ -39,12 +39,22 @@ export const AuthContext = createContext<AuthContextProps>(
   {} as AuthContextProps
 );
 
+const getUserFromLocalStorage = () => {
+  const user = localStorage.getItem("user");
+
+  if (user) {
+    return JSON.parse(user) as User;
+  }
+
+  return null;
+};
+
 type AuthProviderProps = {
   children?: ReactNode;
 };
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User | null>(getUserFromLocalStorage());
   const [cash, setCash] = useState<number | null>(null);
   const toast = useToast();
 
@@ -66,16 +76,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   );
 
   const isAuthenticated = !!user;
-
-  useEffect(() => {
-    const userJson = localStorage.getItem("user");
-
-    if (userJson) {
-      const user = JSON.parse(userJson) as User;
-
-      setUser(user);
-    }
-  }, []);
 
   useEffect(() => {
     if (fetchError) {

@@ -2,6 +2,7 @@ import React from "react";
 
 import { Flex } from "@chakra-ui/react";
 import { Route, Routes, Navigate } from "react-router-dom";
+import SimpleBar from "simplebar-react";
 
 import Loading from "../components/Common/Loading";
 import routes from "../config/routes";
@@ -25,20 +26,22 @@ const Main: React.FC = () => (
       overflow="auto"
       as="article"
     >
-      <Routes>
-        {protectedRoutes.map(({ component: Element, name, path }) => (
-          <Route
-            key={name}
-            path={path}
-            element={
-              <React.Suspense fallback={<Loading />}>
-                <Element />
-              </React.Suspense>
-            }
-          />
-        ))}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+      <SimpleBar>
+        <Routes>
+          {protectedRoutes.map(({ component: Element, name, path }) => (
+            <Route
+              key={name}
+              path={path}
+              element={
+                <React.Suspense fallback={<Loading />}>
+                  <Element />
+                </React.Suspense>
+              }
+            />
+          ))}
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </SimpleBar>
     </Flex>
     <RightAside />
   </Flex>

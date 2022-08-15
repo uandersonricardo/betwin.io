@@ -1,8 +1,5 @@
-import Match from "../../business/entities/Match";
-import User from "../../business/entities/User";
-
 interface IFavoriteRepository {
-  insert(user: User, match: Match): Promise<void>;
+  insert(userId: string, matchId: string): Promise<void>;
 }
 
 export default IFavoriteRepository;

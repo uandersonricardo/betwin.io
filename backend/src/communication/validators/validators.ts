@@ -88,7 +88,7 @@ export const betValidator = [
 ];
 
 export const favoriteValidator = [
-  body("match")
+  body("matchId")
     .notEmpty()
     .withMessage("É necessário escolher um jogo para favoritar")
 ];

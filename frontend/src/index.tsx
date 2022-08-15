@@ -6,6 +6,8 @@ import { AuthProvider } from "./contexts/Auth";
 import Screens from "./screens";
 import theme from "./styles";
 
+import "simplebar/dist/simplebar.min.css";
+
 const queryClient = new QueryClient();
 
 const root = createRoot(document.getElementById("root") as HTMLElement);
