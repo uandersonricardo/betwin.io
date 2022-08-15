@@ -6,7 +6,6 @@ import SimpleBar from "simplebar-react";
 
 import Loading from "../components/Common/Loading";
 import routes from "../config/routes";
-import LeftAside from "./LeftAside";
 import RightAside from "./RightAside";
 
 const protectedRoutes = routes.filter(route => route.isProtected);
