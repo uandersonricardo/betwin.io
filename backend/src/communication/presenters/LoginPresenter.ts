@@ -20,7 +20,7 @@ class LoginPresenter {
       throw new Error("Invalid credentials");
     }
 
-    const token = await this.facade.registerSession(user);
+    const token = await this.facade.registerSession(user.getId());
 
     res.cookie("access-token", token, {
       httpOnly: true,

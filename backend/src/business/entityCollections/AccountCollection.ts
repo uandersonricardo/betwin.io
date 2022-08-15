@@ -13,8 +13,8 @@ class AccountCollection {
     this.accountRepository = accountRepository;
   }
 
-  public async insert(user: User) {
-    return await this.accountRepository.insert(user);
+  public async insert(userId: string) {
+    return await this.accountRepository.insert(userId);
   }
 
   public async debitCash(userId: string, value: number) {

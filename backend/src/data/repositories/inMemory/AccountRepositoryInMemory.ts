@@ -12,20 +12,18 @@ class AccountRepositoryInMemory implements IAccountRepository {
     this.accounts = [];
   }
 
-  public async insert(user: User) {
+  public async insert(userId: string) {
     if (
       this.accounts.find(
-        currentAccount => currentAccount.getUserId() === user.getId()
+        currentAccount => currentAccount.getUserId() === userId
       )
     ) {
       throw new Error("User already exists");
     }
 
-    const newAccount = new Account(user.getId(), 0);
+    const newAccount = new Account(userId, 0);
 
     this.accounts.push(newAccount);
-
-    return newAccount;
   }
 
   public async debitCash(userId: string, value: number) {

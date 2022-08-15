@@ -8,19 +8,15 @@ import { IUserSchema } from "../../schemas/mongo/User";
 
 @singleton()
 class AccountRepositoryMongo implements IAccountRepository {
-  public async insert(user: User) {
-    if (await AccountSchema.findOne({ user: user.getId() })) {
+  public async insert(userId: string) {
+    if (await AccountSchema.findOne({ user: userId })) {
       throw new Error("User already exists");
     }
 
-    const mongoAccount = await AccountSchema.create({
-      user: user.getId(),
+    await AccountSchema.create({
+      user: userId,
       cash: 0
     });
-
-    const newAccount = new Account(user.getId(), mongoAccount.cash);
-
-    return newAccount;
   }
 
   public async debitCash(userId: string, value: number) {

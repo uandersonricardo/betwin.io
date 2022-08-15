@@ -19,7 +19,7 @@ class RegisterControl {
 
   public async register(userFields: UserFields) {
     const user = await this.userCollection.insert(userFields);
-    await this.accountCollection.insert(user);
+    await this.accountCollection.insert(user.getId());
 
     return user;
   }
