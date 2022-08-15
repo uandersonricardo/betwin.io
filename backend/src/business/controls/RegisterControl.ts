@@ -1,6 +1,5 @@
 import { injectable } from "tsyringe";
 
-import UserFields from "../entities/UserFields";
 import AccountCollection from "../entityCollections/AccountCollection";
 import UserCollection from "../entityCollections/UserCollection";
 
@@ -17,8 +16,18 @@ class RegisterControl {
     this.accountCollection = accountCollection;
   }
 
-  public async register(userFields: UserFields) {
-    const user = await this.userCollection.insert(userFields);
+  public async register(
+    username: string,
+    password: string,
+    email: string,
+    cpf: string
+  ) {
+    const user = await this.userCollection.insert(
+      username,
+      password,
+      email,
+      cpf
+    );
     await this.accountCollection.insert(user.getId());
 
     return user;

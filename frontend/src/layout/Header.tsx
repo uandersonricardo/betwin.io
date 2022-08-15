@@ -35,6 +35,7 @@ import {
   TbUserPlus,
   TbWallet
 } from "react-icons/tb";
+import { Link } from "react-router-dom";
 
 import logo from "../assets/logo.png";
 import DepositModal from "../components/Modals/DepositModal";
@@ -189,9 +190,11 @@ const Header: React.FC<MobileProps> = ({ onOpen, ...rest }) => {
             </MenuButton>
             <MenuList bg="gray.900" borderColor="gray.700">
               <MenuItem icon={<TbUser fontSize="1rem" />}>Perfil</MenuItem>
-              <MenuItem icon={<TbArrowsRightLeft fontSize="1rem" />}>
-                Transações
-              </MenuItem>
+              <Link to="/transactions">
+                <MenuItem icon={<TbArrowsRightLeft fontSize="1rem" />}>
+                  Transações
+                </MenuItem>
+              </Link>
               <MenuItem icon={<TbUserPlus fontSize="1rem" />}>Indicar</MenuItem>
               <MenuDivider />
               <MenuItem icon={<TbWallet fontSize="1rem" />} onClick={onClick}>

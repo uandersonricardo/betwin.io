@@ -1,8 +1,12 @@
 import User from "../../business/entities/User";
-import UserFields from "../../business/entities/UserFields";
 
 interface IUserRepository {
-  insert(user: UserFields): Promise<User>;
+  insert(
+    username: string,
+    password: string,
+    email: string,
+    cpf: string
+  ): Promise<User>;
   validateCredentials(username: string, password: string): Promise<User>;
   findById(id: string): Promise<User>;
 }

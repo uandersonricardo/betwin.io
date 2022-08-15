@@ -2,7 +2,6 @@ import { singleton } from "tsyringe";
 import { v4 as uuidv4 } from "uuid";
 
 import User from "../../../business/entities/User";
-import UserFields from "../../../business/entities/UserFields";
 import IUserRepository from "../../repositoryInterfaces/IUserRepository";
 
 @singleton()
@@ -13,36 +12,29 @@ class UserRepositoryInMemory implements IUserRepository {
     this.users = [];
   }
 
-  public async insert(user: UserFields) {
+  public async insert(
+    username: string,
+    password: string,
+    email: string,
+    cpf: string
+  ) {
     if (
-      this.users.find(
-        currentUser => currentUser.getUsername() === user.getUsername()
-      )
+      this.users.find(currentUser => currentUser.getUsername() === username)
     ) {
       throw new Error("User already exists");
     }
 
-    if (
-      this.users.find(currentUser => currentUser.getEmail() === user.getEmail())
-    ) {
+    if (this.users.find(currentUser => currentUser.getEmail() === email)) {
       throw new Error("Email already exists");
     }
 
-    if (
-      this.users.find(currentUser => currentUser.getCpf() === user.getCpf())
-    ) {
+    if (this.users.find(currentUser => currentUser.getCpf() === cpf)) {
       throw new Error("Phone already exists");
     }
 
     const id = uuidv4();
 
-    const newUser = new User(
-      id,
-      user.getUsername(),
-      user.getPassword(),
-      user.getEmail(),
-      user.getCpf()
-    );
+    const newUser = new User(id, username, password, email, cpf);
 
     this.users.push(newUser);
 

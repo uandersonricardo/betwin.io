@@ -1,7 +1,6 @@
 import { inject, injectable } from "tsyringe";
 
 import IUserRepository from "../../data/repositoryInterfaces/IUserRepository";
-import UserFields from "../entities/UserFields";
 
 @injectable()
 class UserCollection {
@@ -11,8 +10,13 @@ class UserCollection {
     this.userRepository = userRepository;
   }
 
-  public async insert(user: UserFields) {
-    return await this.userRepository.insert(user);
+  public async insert(
+    username: string,
+    password: string,
+    email: string,
+    cpf: string
+  ) {
+    return await this.userRepository.insert(username, password, email, cpf);
   }
 
   public async validateCredentials(username: string, password: string) {

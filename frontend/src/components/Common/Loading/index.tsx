@@ -6,7 +6,7 @@ const Loading: React.FC = () => (
   <Flex
     w="full"
     h="full"
-    flex="auto"
+    flex="1"
     align="center"
     justify="center"
     bg="gray.100"

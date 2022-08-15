@@ -13,7 +13,6 @@ const protectedRoutes = routes.filter(route => route.isProtected);
 
 const Main: React.FC = () => (
   <Flex direction="row" flex="auto" as="main" overflow="hidden">
-    <LeftAside />
     <Flex
       bg="gray.100"
       flex="1"
@@ -23,10 +22,18 @@ const Main: React.FC = () => (
       borderColor="gray.700"
       color="white"
       direction="column"
-      overflow="auto"
+      overflow="hidden"
       as="article"
     >
-      <SimpleBar>
+      <SimpleBar
+        style={{
+          overflow: "auto",
+          flex: 1,
+          height: "100%",
+          display: "flex",
+          flexDirection: "column"
+        }}
+      >
         <Routes>
           {protectedRoutes.map(({ component: Element, name, path }) => (
             <Route

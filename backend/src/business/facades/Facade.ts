@@ -11,9 +11,8 @@ import LoginControl from "../controls/LoginControl";
 import MatchControl from "../controls/MatchControl";
 import MeControl from "../controls/MeControl";
 import RegisterControl from "../controls/RegisterControl";
+import TransactionControl from "../controls/TransactionControl";
 import BetOdd from "../entities/BetOdd";
-import User from "../entities/User";
-import UserFields from "../entities/UserFields";
 import IRepositoryFactory from "../factories/IRepositoryFactory";
 
 @injectable()
@@ -26,6 +25,7 @@ class Facade {
   private cashControl;
   private matchControl;
   private depositControl;
+  private transactionControl;
 
   constructor(
     @inject("RepositoryFactory") repositoryFactory: IRepositoryFactory
@@ -54,10 +54,16 @@ class Facade {
     this.cashControl = container.resolve(CashControl);
     this.matchControl = container.resolve(MatchControl);
     this.depositControl = container.resolve(DepositControl);
+    this.transactionControl = container.resolve(TransactionControl);
   }
 
-  public async register(user: UserFields) {
-    return await this.registerControl.register(user);
+  public async register(
+    username: string,
+    password: string,
+    email: string,
+    cpf: string
+  ) {
+    return await this.registerControl.register(username, password, email, cpf);
   }
 
   public async login(username: string, password: string) {
@@ -121,6 +127,11 @@ class Facade {
   public async match(matchId: string) {
     const match = await this.matchControl.match(matchId);
     return match;
+  }
+
+  public async transactions(filter: string) {
+    const transactions = await this.transactionControl.transactions(filter);
+    return transactions;
   }
 }
 

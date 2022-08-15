@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 
 const RightAside: React.FC = () => (
-  <Flex as="aside" direction="column" bg="gray.900" color="white" minW="72">
+  <Flex as="aside" direction="column" bg="gray.900" color="white" w="72">
     <Flex
       direction="column"
       p="6"
@@ -38,66 +38,28 @@ const RightAside: React.FC = () => (
       p="6"
       borderBottom="1px solid"
       borderBottomColor="gray.700"
+      flex="auto"
+      w="full"
     >
       <Heading fontSize="md" fontWeight="bold" mb="4">
-        Países
+        Últimas apostas
       </Heading>
-      <VStack>
-        <Flex align="center" justify="start" w="full" py="2">
-          <Image
-            src="http://geo5.net/imagens/Bandeira-da-Alemanha-2000px.png"
-            h="12"
-            w="12"
-            fit="cover"
-            borderRadius="full"
-            mr="4"
-          />
-          <Flex direction="column">
-            <Text fontSize="sm" color="white" fontWeight="bold">
-              Alemanha
-            </Text>
-            <Text fontSize="sm" color="gray.500">
-              Bundesliga, Ligue 1
-            </Text>
-          </Flex>
-        </Flex>
-        <Flex align="center" justify="start" w="full" py="2">
-          <Image
-            src="https://s1.static.brasilescola.uol.com.br/be/conteudo/images/2-bandeira-do-brasil.jpg"
-            h="12"
-            w="12"
-            fit="cover"
-            borderRadius="full"
-            mr="4"
-          />
-          <Flex direction="column">
-            <Text fontSize="sm" color="white" fontWeight="bold">
-              Brasil
-            </Text>
-            <Text fontSize="sm" color="gray.500">
-              Série A, Série B
-            </Text>
-          </Flex>
-        </Flex>
-        <Flex align="center" justify="start" w="full" py="2">
-          <Image
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/be/Flag_of_England.svg/255px-Flag_of_England.svg.png"
-            h="12"
-            w="12"
-            fit="cover"
-            borderRadius="full"
-            mr="4"
-          />
-          <Flex direction="column">
-            <Text fontSize="sm" color="white" fontWeight="bold">
-              Inglaterra
-            </Text>
-            <Text fontSize="sm" color="gray.500">
-              Premier League, Ligue 1
-            </Text>
-          </Flex>
-        </Flex>
-      </VStack>
+      <Flex
+        direction="column"
+        flex="auto"
+        align="center"
+        justify="center"
+        color="gray.400"
+        w="full"
+        h="full"
+        borderRadius="lg"
+        border="2px dashed"
+        borderColor="gray.700"
+        p="6"
+        textAlign="center"
+      >
+        Nenhuma aposta encontrada
+      </Flex>
     </Flex>
     <Flex
       direction="column"
@@ -106,7 +68,7 @@ const RightAside: React.FC = () => (
       borderBottomColor="gray.700"
     >
       <Heading fontSize="md" fontWeight="bold" mb="4">
-        Ligas
+        Ligas em destaque
       </Heading>
       <VStack>
         <Flex align="center" justify="start" w="full" py="2">
