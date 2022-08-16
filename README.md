@@ -9,3 +9,4 @@ O betwin.io é uma plataforma de apostas online que oferece a melhor experiênci
 
 ## Entregas
 - [Descrição da equipe, escopo do projeto e casos de usos a serem trabalhados](https://docs.google.com/document/d/1qjtF7gKPQcllIiyvflN_EY4MvY2E6e5c7SLSbbHjHKs/edit?usp=sharing)
+- [Apresentação RUP](https://docs.google.com/presentation/d/1E241NUvtZoV_DmIs9hP6OnX36ewmxTi2fVAFzXiOBj4/edit?usp=sharing)
