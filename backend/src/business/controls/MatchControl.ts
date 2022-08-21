@@ -3,6 +3,7 @@ import { match } from "assert";
 import axios from "axios";
 import { injectable } from "tsyringe";
 
+import environment from "../../config/environment";
 import allowedSports from "../../config/sports";
 import { MatchInfo, Odd, OddCategory, Sport } from "../../types";
 import BetOdd from "../entities/BetOdd";
@@ -32,6 +33,12 @@ class MatchControl {
     const { data } = await axios.get(
       `https://eu-offering.kambicdn.org/offering/v2018/ub/listView${filter}.json?lang=pt_BR&market=BR`,
       {
+        proxy: environment.proxyHost
+          ? {
+              host: environment.proxyHost,
+              port: environment.proxyPort
+            }
+          : undefined,
         headers: {
           Accept:
             "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
@@ -132,6 +139,12 @@ class MatchControl {
     const { data } = await axios.get(
       `https://eu-offering.kambicdn.org/offering/v2018/ub/betoffer/event/${matchId}.json?lang=pt_BR`,
       {
+        proxy: environment.proxyHost
+          ? {
+              host: environment.proxyHost,
+              port: environment.proxyPort
+            }
+          : undefined,
         headers: {
           Accept:
             "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
@@ -162,6 +175,12 @@ class MatchControl {
     const { data: liveData } = await axios.get(
       `https://eu-offering.kambicdn.org/offering/v2018/ub/event/${matchId}/livedata.json?lang=pt_BR&market=BR`,
       {
+        proxy: environment.proxyHost
+          ? {
+              host: environment.proxyHost,
+              port: environment.proxyPort
+            }
+          : undefined,
         headers: {
           Accept:
             "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
