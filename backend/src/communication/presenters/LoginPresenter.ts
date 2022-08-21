@@ -25,7 +25,7 @@ class LoginPresenter {
     res.cookie("access-token", token, {
       httpOnly: true,
       maxAge: 1000 * auth.expiresIn,
-      sameSite: environment.isProduction ? "strict" : "lax",
+      sameSite: "lax",
       path: "/",
       secure: environment.isProduction
     });
