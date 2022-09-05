@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { injectable } from "tsyringe";
 
-import Facade from "../../business/facades/Facade";
 import auth from "../../config/auth";
 import environment from "../../config/environment";
+import Facade from "../../model/facades/Facade";
 
 @injectable()
 class LoginPresenter {

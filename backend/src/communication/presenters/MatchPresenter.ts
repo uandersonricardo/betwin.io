@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { injectable } from "tsyringe";
 
-import BetOdd from "../../business/entities/BetOdd";
-import Facade from "../../business/facades/Facade";
+import BetOdd from "../../model/bet/BetOdd";
+import Facade from "../../model/facades/Facade";
 
 @injectable()
 class MatchPresenter {
