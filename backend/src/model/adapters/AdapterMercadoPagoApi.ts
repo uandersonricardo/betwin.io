@@ -1,8 +1,14 @@
 import environment from "../../config/environment";
-import mercadopago from "../../config/mercadopago";
 import ISubsystemPaymentApi from "../../subsystems/ISubsystemPaymentApi";
+import SubsystemMercadoPagoApi from "../../subsystems/SubsystemMercadoPagoApi";
 
-class AdapterPaymentApi implements ISubsystemPaymentApi {
+class AdapterMercadoPagoApi implements ISubsystemPaymentApi {
+  private mercadoPagoSubsystem;
+
+  constructor(mercadoPagoSubsystem: SubsystemMercadoPagoApi) {
+    this.mercadoPagoSubsystem = mercadoPagoSubsystem;
+  }
+
   public async generatePayment(value: number, transactionId: string) {
     const preference = {
       items: [
@@ -22,16 +28,18 @@ class AdapterPaymentApi implements ISubsystemPaymentApi {
       notification_url: environment.appUrl + "/deposit/event"
     };
 
-    const response = await mercadopago.preferences.create(preference);
+    const response = await this.mercadoPagoSubsystem.createPreference(
+      preference
+    );
 
-    return response.body.init_point;
+    return response.init_point;
   }
 
   public async getPaymentInfo(paymentId: string) {
-    const response = await mercadopago.payment.findById(Number(paymentId));
+    const response = await this.mercadoPagoSubsystem.findPayment(paymentId);
 
     return response.body;
   }
 }
 
-export default AdapterPaymentApi;
+export default AdapterMercadoPagoApi;

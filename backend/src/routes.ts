@@ -2,6 +2,7 @@ import { Router } from "express";
 import { container } from "tsyringe";
 
 import AuthMiddleware from "./communication/middlewares/AuthMiddleware";
+import DepositNotifier from "./communication/notifiers/DepositNotifier";
 import CashPresenter from "./communication/presenters/CashPresenter";
 import DepositPresenter from "./communication/presenters/DepositPresenter";
 import LoginPresenter from "./communication/presenters/LoginPresenter";
@@ -20,6 +21,7 @@ import {
 } from "./communication/validators/validators";
 
 const authMiddleware = container.resolve(AuthMiddleware);
+const depositNotifier = container.resolve(DepositNotifier);
 const registerPresenter = container.resolve(RegisterPresenter);
 const loginPresenter = container.resolve(LoginPresenter);
 const logoutPresenter = container.resolve(LogoutPresenter);
@@ -69,7 +71,7 @@ routes.post(
 
 routes.post(
   "/deposit/event",
-  async (req, res) => await depositPresenter.event(req, res)
+  async (req, res) => await depositNotifier.event(req, res)
 );
 
 routes.post(

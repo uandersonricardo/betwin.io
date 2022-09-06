@@ -1,8 +1,8 @@
-import { injectable } from "tsyringe";
+import { container, injectable } from "tsyringe";
 
 import ISubsystemPaymentApi from "../../subsystems/ISubsystemPaymentApi";
 import AccountCollection from "../account/AccountCollection";
-import AdapterPaymentApi from "../adapters/AdapterPaymentApi";
+import AdapterMercadoPagoApi from "../adapters/AdapterMercadoPagoApi";
 import TransactionCollection from "../transaction/TransactionCollection";
 
 @injectable()
@@ -26,7 +26,7 @@ class DepositControl {
     let paymentSubsystem: ISubsystemPaymentApi;
 
     if (method === "mercadopago") {
-      paymentSubsystem = new AdapterPaymentApi();
+      paymentSubsystem = container.resolve(AdapterMercadoPagoApi);
     } else {
       throw new Error("Method not valid");
     }
@@ -60,7 +60,7 @@ class DepositControl {
     let paymentSubsystem: ISubsystemPaymentApi;
 
     if (method === "mercadopago") {
-      paymentSubsystem = new AdapterPaymentApi();
+      paymentSubsystem = container.resolve(AdapterMercadoPagoApi);
     } else {
       throw new Error("Method not valid");
     }
