@@ -1,27 +1,28 @@
 version: "3.4"
 services:
-  account-service:
+  access-service:
     build:
-      context: ./account-service/
+      context: ./access-service/
       dockerfile: Dockerfile
       network: host
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     depends_on:
-      - account-service-db
+      - access-service-db
     ports:
       - "3033:3000"
     volumes:
-      - ./account-service:/app
+      - ./access-service:/app
     environment:
-      - DATABASE_URL=postgres://postgres:postgres@account-service-db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
     restart: unless-stopped
 
-  account-service-db:
+  access-service-db:
     image: postgres:14-alpine
     environment:
       - POSTGRES_PASSWORD=postgres
     ports:
       - "15432:5432"
     volumes:
-      - /tmp/account-service-db:/var/lib/postgresql/data
+      - /tmp/access-service-db:/var/lib/postgresql/data
     restart: always
