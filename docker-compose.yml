@@ -1,12 +1,14 @@
 version: "3.4"
+
 services:
   access-service:
     build:
       context: ./access-service/
       dockerfile: Dockerfile
-      network: host
     command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     depends_on:
+      - discovery
+      - discovery-esm
       - access-service-db
     ports:
       - "3033:3000"
@@ -15,6 +17,8 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    networks:
+      - app-network
     restart: unless-stopped
 
   access-service-db:
@@ -25,4 +29,34 @@ services:
       - "15432:5432"
     volumes:
       - /tmp/access-service-db:/var/lib/postgresql/data
+    networks:
+      - app-network
     restart: always
+
+  discovery:
+    image: consul:latest
+    command: "agent"
+    ports:
+      - "8500:8500"
+      - "8600:53/tcp"
+      - "8600:53/udp"
+    volumes:
+      - ./discovery/server.json:/consul/config/server.json:ro
+    networks:
+      - app-network
+    restart: always
+
+  discovery-esm:
+    image: hashicorp/consul-esm:latest
+    restart: always
+    depends_on:
+      - discovery
+    volumes:
+      - ./discovery/esm.json:/consul-esm/config/esm.json:ro
+    command: "consul-esm -config-file=/consul-esm/config/esm.json"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

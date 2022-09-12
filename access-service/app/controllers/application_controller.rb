@@ -3,6 +3,10 @@ class ApplicationController < ActionController::API
     render json: { errors: ['Not found'] }, status: :not_found
   end
 
+  def health
+    render json: {}, status: 200
+  end
+
   def authorize_request
     header = request.headers['Authorization']
 
