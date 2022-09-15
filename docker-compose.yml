@@ -5,30 +5,30 @@ services:
     build:
       context: ./access-service/
       dockerfile: Dockerfile
-    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    command: yarn dev
     depends_on:
       - discovery
-      - discovery-esm
       - access-service-db
+    environment:
+      - APP_URL=http://access-service:3333
+      - CLIENT_URL=http://frontend:3000
+      - MONGO_URL=mongodb://root:root@access-service-db:27017/?retryWrites=true&w=majority
+      - APP_SECRET=wteAAz2PcNO6GspgBILwE2YHwQr2l8VxXBFfIHVR0Xh4J43fHVhHDFGIld0ZBKA
     ports:
-      - "3033:3000"
+      - "3033:3333"
     volumes:
       - ./access-service:/app
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
     networks:
       - app-network
     restart: unless-stopped
 
   access-service-db:
-    image: postgres:14-alpine
-    environment:
-      - POSTGRES_PASSWORD=postgres
-    ports:
-      - "15432:5432"
+    image: mongo
     volumes:
-      - /tmp/access-service-db:/var/lib/postgresql/data
+      - /tmp/access-service-db:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
     networks:
       - app-network
     restart: always
@@ -45,17 +45,6 @@ services:
     networks:
       - app-network
     restart: always
-
-  discovery-esm:
-    image: hashicorp/consul-esm:latest
-    restart: always
-    depends_on:
-      - discovery
-    volumes:
-      - ./discovery/esm.json:/consul-esm/config/esm.json:ro
-    command: "consul-esm -config-file=/consul-esm/config/esm.json"
-    networks:
-      - app-network
 
 networks:
   app-network:
