@@ -1,8 +1,14 @@
-FROM ruby:3.1.2
+FROM node:16
 
 WORKDIR /app
 
-COPY Gemfile Gemfile.lock ./
-RUN bundle install
+COPY package.json ./
+COPY yarn.lock ./
+
+RUN yarn
 
 COPY . .
+
+EXPOSE 3333
+
+CMD ["yarn", "dev"]
