@@ -1,5 +1,6 @@
 import { injectable } from "tsyringe";
 
+import { communicate } from "../../utils/services";
 import UserCollection from "../user/UserCollection";
 
 @injectable()
@@ -22,7 +23,12 @@ class RegisterControl {
       email,
       cpf
     );
-    // await this.accountCollection.insert(user.getId());
+
+    await communicate("transaction-service", {
+      url: "/account",
+      method: "post",
+      data: { userId: user.getId() }
+    });
 
     return user;
   }

@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
 import { injectable } from "tsyringe";
 
-import auth from "../../config/auth";
-import environment from "../../config/environment";
 import Facade from "../../model/facades/Facade";
 
 @injectable()
@@ -22,15 +20,7 @@ class LoginPresenter {
 
     const token = await this.facade.registerSession(user.getId());
 
-    res.cookie("access-token", token, {
-      httpOnly: true,
-      maxAge: 1000 * auth.expiresIn,
-      sameSite: environment.isProduction ? "none" : "lax",
-      path: "/",
-      secure: environment.isProduction
-    });
-
-    res.status(200).json({ user });
+    res.status(200).json({ user, token });
   }
 }
 

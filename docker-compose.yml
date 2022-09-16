@@ -9,11 +9,7 @@ services:
     depends_on:
       - discovery
       - access-service-db
-    environment:
-      - APP_URL=http://access-service:3333
-      - CLIENT_URL=http://frontend:3000
-      - MONGO_URL=mongodb://root:root@access-service-db:27017/?retryWrites=true&w=majority
-      - APP_SECRET=wteAAz2PcNO6GspgBILwE2YHwQr2l8VxXBFfIHVR0Xh4J43fHVhHDFGIld0ZBKA
+    env_file: ./access-service/.env
     ports:
       - "3033:3333"
     volumes:
@@ -26,6 +22,34 @@ services:
     image: mongo
     volumes:
       - /tmp/access-service-db:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    networks:
+      - app-network
+    restart: always
+
+  transaction-service:
+    build:
+      context: ./transaction-service/
+      dockerfile: Dockerfile
+    command: yarn dev
+    depends_on:
+      - discovery
+      - transaction-service-db
+    env_file: ./transaction-service/.env
+    ports:
+      - "3034:3333"
+    volumes:
+      - ./transaction-service:/app
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  transaction-service-db:
+    image: mongo
+    volumes:
+      - /tmp/transaction-service-db:/data/db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=root
