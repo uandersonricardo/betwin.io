@@ -1,5 +1,5 @@
 {
-    "node_name": "discovery-server",
+    "node_name": "betwinio-server",
     "server": true,
     "bootstrap": true,
     "enable_script_checks": true,
