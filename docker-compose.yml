@@ -11,7 +11,7 @@ services:
       - access-service-db
     env_file: ./access-service/.env
     ports:
-      - "3033:3333"
+      - "3032:3333"
     volumes:
       - ./access-service:/app
     networks:
@@ -39,7 +39,7 @@ services:
       - transaction-service-db
     env_file: ./transaction-service/.env
     ports:
-      - "3034:3333"
+      - "3033:3333"
     volumes:
       - ./transaction-service:/app
     networks:
@@ -57,11 +57,26 @@ services:
       - app-network
     restart: always
 
+  api-gateway:
+    build:
+      context: ./api-gateway/
+      dockerfile: Dockerfile
+    command: yarn dev
+    depends_on:
+      - discovery
+    ports:
+      - "3030:3333"
+    volumes:
+      - ./api-gateway:/app
+    networks:
+      - app-network
+    restart: unless-stopped
+
   discovery:
     image: consul:latest
     command: "agent"
     ports:
-      - "8500:8500"
+      - "3031:8500"
       - "8600:53/tcp"
       - "8600:53/udp"
     volumes:
