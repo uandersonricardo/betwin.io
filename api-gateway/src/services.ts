@@ -4,8 +4,16 @@ const services = [
     name: "access-service"
   },
   {
-    path: "/transaction",
-    name: "transaction-service"
+    path: "/account",
+    name: "account-service"
+  },
+  {
+    path: "/bet",
+    name: "bet-service"
+  },
+  {
+    path: "/match",
+    name: "match-service"
   }
 ];
 

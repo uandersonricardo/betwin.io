@@ -24,7 +24,7 @@ class RegisterControl {
       cpf
     );
 
-    await communicate("transaction-service", {
+    await communicate("account-service", {
       url: "/account",
       method: "post",
       data: { userId: user.getId() }

@@ -29,33 +29,77 @@ services:
       - app-network
     restart: always
 
-  transaction-service:
+  account-service:
     build:
-      context: ./transaction-service/
+      context: ./account-service/
       dockerfile: Dockerfile
     command: yarn dev
     depends_on:
       - discovery
-      - transaction-service-db
-    env_file: ./transaction-service/.env
+      - account-service-db
+    env_file: ./account-service/.env
     ports:
       - "3033:3333"
     volumes:
-      - ./transaction-service:/app
+      - ./account-service:/app
     networks:
       - app-network
     restart: unless-stopped
 
-  transaction-service-db:
+  account-service-db:
     image: mongo
     volumes:
-      - /tmp/transaction-service-db:/data/db
+      - /tmp/account-service-db:/data/db
     environment:
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=root
     networks:
       - app-network
     restart: always
+
+  bet-service:
+    build:
+      context: ./bet-service/
+      dockerfile: Dockerfile
+    command: yarn dev
+    depends_on:
+      - discovery
+      - bet-service-db
+    env_file: ./bet-service/.env
+    ports:
+      - "3034:3333"
+    volumes:
+      - ./bet-service:/app
+    networks:
+      - app-network
+    restart: unless-stopped
+
+  bet-service-db:
+    image: mongo
+    volumes:
+      - /tmp/bet-service-db:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    networks:
+      - app-network
+    restart: always
+
+  match-service:
+    build:
+      context: ./match-service/
+      dockerfile: Dockerfile
+    command: yarn dev
+    depends_on:
+      - discovery
+    env_file: ./match-service/.env
+    ports:
+      - "3035:3333"
+    volumes:
+      - ./match-service:/app
+    networks:
+      - app-network
+    restart: unless-stopped
 
   api-gateway:
     build:
