@@ -35,7 +35,7 @@ const Match: React.FC = () => {
     isLoading,
     data: fetchData,
     error: fetchError
-  } = useFetch(`/matches/${id}`, {}, { staleTime: 1000 * 10 });
+  } = useFetch(`/match/matches/${id}`, {}, { staleTime: 1000 * 10 });
 
   useEffect(() => {
     if (fetchError) {

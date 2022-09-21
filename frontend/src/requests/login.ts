@@ -6,7 +6,7 @@ type LoginBody = {
 };
 
 const loginRequest = (body: LoginBody) => {
-  return api.post("/login", body);
+  return api.post("/access/login", body);
 };
 
 export default loginRequest;

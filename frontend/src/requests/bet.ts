@@ -8,7 +8,7 @@ type BetBody = {
 };
 
 const betRequest = (body: BetBody) => {
-  return api.post("/bet", body);
+  return api.post("/bet/bet", body);
 };
 
 export default betRequest;

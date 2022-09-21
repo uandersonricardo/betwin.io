@@ -8,7 +8,7 @@ type RegisterBody = {
 };
 
 const registerRequest = (body: RegisterBody) => {
-  return api.post("/register", body);
+  return api.post("/access/register", body);
 };
 
 export default registerRequest;

@@ -35,7 +35,7 @@ const Transactions: React.FC = () => {
     isLoading,
     data: fetchData,
     error: fetchError
-  } = useFetch("/transactions");
+  } = useFetch("/account/transactions");
 
   useEffect(() => {
     if (fetchError) {

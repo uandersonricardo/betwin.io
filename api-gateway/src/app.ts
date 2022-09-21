@@ -20,7 +20,6 @@ class App {
 
     this.server.use(
       cors({
-        credentials: true,
         origin: "*"
       })
     );
