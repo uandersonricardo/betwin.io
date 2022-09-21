@@ -59,7 +59,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const toast = useToast();
 
   const { data: fetchData, error: fetchError } = useFetch(
-    "/me",
+    "/access/me",
     {},
     {
       enabled: !!user
@@ -67,7 +67,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   );
 
   const { data: fetchCashData, error: fetchCashError } = useFetch(
-    "/cash",
+    "/account/cash",
     {},
     {
       enabled: !!user,
@@ -121,6 +121,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const res = await loginRequest({ username, password });
 
     localStorage.setItem("user", JSON.stringify(res.data.user));
+    localStorage.setItem("token", res.data.token);
 
     setUser(res.data.user);
   };
@@ -129,6 +130,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     await logoutRequest().catch(() => null);
 
     localStorage.removeItem("user");
+    localStorage.removeItem("token");
 
     setUser(null);
   };

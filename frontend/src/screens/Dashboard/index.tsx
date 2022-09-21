@@ -35,7 +35,7 @@ const Dashboard: React.FC = () => {
     isLoading,
     data: fetchData,
     error: fetchError
-  } = useFetch("/matches");
+  } = useFetch("/match/matches");
 
   useEffect(() => {
     if (fetchError) {

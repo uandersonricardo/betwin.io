@@ -6,7 +6,7 @@ type DepositBody = {
 };
 
 const depositRequest = (body: DepositBody) => {
-  return api.post("/deposit", body);
+  return api.post("/account/deposit", body);
 };
 
 export default depositRequest;
